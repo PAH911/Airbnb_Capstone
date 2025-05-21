@@ -8,11 +8,13 @@ import roomDetailReducer from "../pages/client-customer/RoomDetailPage/roomDetai
 import authReducer from "../pages/client-customer/LoginPage/authSlice";
 
 // ADMIN
-import adminUserReducer from "../pages/client-admin/UserManager/adminUserSlice";
+import authadminReducer from "../pages/client-admin/AuthPage/authSlice";
 import adminRoomReducer from "../pages/client-admin/RoomManager/adminRoomSlice";
 import locationReducer from "../pages/client-admin/LocationManager/locationSlice";
 import adminBookingReducer from "../pages/client-admin/BookingManager/adminBookingSlice";
 import adminCommentReducer from "../pages/client-admin/CommentManager/adminCommentSlice";
+import userListReducer from "../pages/client-admin/UserManager/adminUserSlice";
+
 
 export const store = configureStore({
   reducer: {
@@ -24,8 +26,9 @@ export const store = configureStore({
     roomDetail: roomDetailReducer,
 
     // client-admin
-    adminUser: adminUserReducer,
-    adminRoom: adminRoomReducer,
+    adminlogin: authadminReducer,
+    userList: userListReducer,
+    adminRoom: adminRoomReducer,  
     location: locationReducer,
     adminBooking: adminBookingReducer,
     adminComment: adminCommentReducer,
