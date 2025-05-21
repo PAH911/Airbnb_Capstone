@@ -73,7 +73,7 @@ export default function Footer() {
           <Col xs={24} sm={12} md={6}>
             <Title
               level={5}
-              className="mb-3 text-gray-900 dark:text-yellow-200 tracking-wide uppercase"
+              className="mb-3 !text-gray-900 dark:!text-white tracking-wide uppercase"
             >
               Công ty
             </Title>
@@ -102,7 +102,7 @@ export default function Footer() {
           <Col xs={24} sm={12} md={6}>
             <Title
               level={5}
-              className="mb-3 text-gray-900 dark:text-yellow-200 tracking-wide uppercase"
+              className="mb-3 !text-gray-900 dark:!text-white tracking-wide uppercase"
             >
               Liên hệ
             </Title>
@@ -123,7 +123,7 @@ export default function Footer() {
           <Col xs={24} sm={12} md={6}>
             <Title
               level={5}
-              className="mb-3 text-gray-900 dark:text-white tracking-wide uppercase"
+              className="mb-3 !text-gray-900 dark:!text-white tracking-wide uppercase"
             >
               Khác
             </Title>

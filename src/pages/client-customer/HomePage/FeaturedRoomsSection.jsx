@@ -30,7 +30,7 @@ export default function FeaturedRoomsSection() {
         <Text className="uppercase text-rose-500 font-bold tracking-widest block text-center mb-2">
           Phòng nổi bật
         </Text>
-        <Title className="text-center !mb-12 !text-4xl !font-bold text-gray-900 dark:text-white">
+        <Title className="text-center !mb-12 !text-4xl !font-bold !text-gray-900 dark:!text-white">
           Khám phá những phòng tuyệt vời nhất
         </Title>
         {loading ? (
@@ -66,7 +66,7 @@ export default function FeaturedRoomsSection() {
                 >
                   <Title
                     level={4}
-                    className="!mb-1 text-gray-900 dark:text-white"
+                    className="!mb-1 !text-gray-900 dark:!text-white"
                   >
                     {room.tenPhong}
                   </Title>

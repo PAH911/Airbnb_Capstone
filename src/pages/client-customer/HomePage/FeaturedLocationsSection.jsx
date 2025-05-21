@@ -30,7 +30,7 @@ export default function FeaturedLocationsSection() {
         <Text className="uppercase text-rose-500 font-bold tracking-widest block text-center mb-2">
           Địa điểm nổi bật
         </Text>
-        <Title className="text-center !mb-12 !text-4xl !font-bold text-gray-900 dark:text-white">
+        <Title className="text-center !mb-12 !text-4xl !font-bold !text-gray-900 dark:!text-white">
           Điểm đến hấp dẫn trên TripNest
         </Title>
         {loading ? (
@@ -66,7 +66,7 @@ export default function FeaturedLocationsSection() {
                 >
                   <Title
                     level={5}
-                    className="!mb-1 text-gray-900 dark:text-white"
+                    className="!mb-1 !text-gray-900 dark:!text-white"
                   >
                     {loc.tenViTri}
                   </Title>

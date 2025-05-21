@@ -5,7 +5,13 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { updateUser } from "./adminUserSlice";
 
-export default function UserEditModal({ open, onClose, onSuccess, onFailed, user }) {
+export default function UserEditModal({
+  open,
+  onClose,
+  onSuccess,
+  onFailed,
+  user,
+}) {
   const dispatch = useDispatch();
   const { updateLoading } = useSelector((state) => state.userList);
 
@@ -109,7 +115,9 @@ export default function UserEditModal({ open, onClose, onSuccess, onFailed, user
                 </Dialog.Title>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block mb-2 font-semibold text-[#EAF7FF]">Tên</label>
+                    <label className="block mb-2 font-semibold text-[#EAF7FF]">
+                      Tên
+                    </label>
                     <input
                       type="text"
                       name="name"
@@ -122,7 +130,9 @@ export default function UserEditModal({ open, onClose, onSuccess, onFailed, user
                     />
                   </div>
                   <div>
-                    <label className="block mb-2 font-semibold text-[#EAF7FF]">Email</label>
+                    <label className="block mb-2 font-semibold text-[#EAF7FF]">
+                      Email
+                    </label>
                     <input
                       type="email"
                       name="email"
@@ -147,7 +157,9 @@ export default function UserEditModal({ open, onClose, onSuccess, onFailed, user
                     />
                   </div>
                   <div>
-                    <label className="block mb-2 font-semibold text-[#EAF7FF]">Ngày sinh</label>
+                    <label className="block mb-2 font-semibold text-[#EAF7FF]">
+                      Ngày sinh
+                    </label>
                     <input
                       type="date"
                       name="birthday"
@@ -158,14 +170,18 @@ export default function UserEditModal({ open, onClose, onSuccess, onFailed, user
                     />
                   </div>
                   <div>
-                    <label className="block mb-2 font-semibold text-[#EAF7FF]">Giới tính</label>
+                    <label className="block mb-2 font-semibold text-[#EAF7FF]">
+                      Giới tính
+                    </label>
                     <div className="flex gap-8 pt-1">
                       <label className="flex items-center gap-2 text-white font-medium">
                         <input
                           type="radio"
                           name="gender"
                           value={true}
-                          checked={form.gender === true || form.gender === "true"}
+                          checked={
+                            form.gender === true || form.gender === "true"
+                          }
                           onChange={handleChange}
                           className="accent-customYellow"
                         />
@@ -176,7 +192,9 @@ export default function UserEditModal({ open, onClose, onSuccess, onFailed, user
                           type="radio"
                           name="gender"
                           value={false}
-                          checked={form.gender === false || form.gender === "false"}
+                          checked={
+                            form.gender === false || form.gender === "false"
+                          }
                           onChange={handleChange}
                           className="accent-customYellow"
                         />
@@ -185,7 +203,9 @@ export default function UserEditModal({ open, onClose, onSuccess, onFailed, user
                     </div>
                   </div>
                   <div>
-                    <label className="block mb-2 font-semibold text-[#EAF7FF]">Quyền</label>
+                    <label className="block mb-2 font-semibold text-[#EAF7FF]">
+                      Quyền
+                    </label>
                     <select
                       name="role"
                       value={form.role}

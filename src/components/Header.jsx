@@ -136,7 +136,7 @@ export default function Header({ user: userProp }) {
             <Button
               type="primary"
               icon={<LoginOutlined />}
-              className="rounded-full px-4 font-semibold bg-rose-500 border-none hover:bg-rose-600"
+              className="rounded-full px-4 font-semibold bg-rose-500 border-none hover:!bg-rose-600"
               onClick={() => navigate("/login")}
             >
               Đăng nhập

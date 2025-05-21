@@ -35,7 +35,7 @@ export default function HowItWorksSection() {
           <Text className="uppercase text-rose-500 font-bold tracking-widest block mb-2">
             Nhanh chóng & dễ dàng
           </Text>
-          <Title className="!mb-8 !text-4xl !font-bold text-gray-900 dark:text-white">
+          <Title className="!mb-8 !text-4xl !font-bold !text-gray-900 dark:!text-white">
             Đặt chuyến đi của bạn chỉ với 3 bước
           </Title>
           <div className="space-y-8">
@@ -54,7 +54,7 @@ export default function HowItWorksSection() {
                 <div>
                   <Title
                     level={5}
-                    className="!mb-1 text-gray-900 dark:text-white"
+                    className="!mb-1 !text-gray-900 dark:!text-white"
                   >
                     {s.title}
                   </Title>
@@ -79,7 +79,7 @@ export default function HowItWorksSection() {
               alt="Trip to Greece"
               className="h-56 w-full object-cover rounded-xl mb-4"
             />
-            <Title level={5} className="!mb-1 text-gray-900 dark:text-white">
+            <Title level={5} className="!mb-1 !text-gray-900 dark:!text-white">
               Trip To Greece
             </Title>
             <Text className="block mb-2 text-gray-500 dark:text-gray-300">

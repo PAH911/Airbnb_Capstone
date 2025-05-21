@@ -35,7 +35,7 @@ export default function TestimonialsSection() {
         <Text className="uppercase text-rose-500 font-bold tracking-widest block text-center mb-2">
           Đánh giá
         </Text>
-        <Title className="text-center !mb-12 !text-4xl !font-bold text-gray-900 dark:text-white">
+        <Title className="text-center !mb-12 !text-4xl !font-bold !text-gray-900 dark:!text-white">
           Khách hàng nói gì về TripNest
         </Title>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -54,7 +54,7 @@ export default function TestimonialsSection() {
                 <div>
                   <Title
                     level={5}
-                    className="!mb-0 text-gray-900 dark:text-white"
+                    className="!mb-0 !text-gray-900 dark:!text-white"
                   >
                     {t.name}
                   </Title>
