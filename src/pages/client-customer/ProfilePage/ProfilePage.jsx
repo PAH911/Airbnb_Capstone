@@ -10,12 +10,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
-import { setUser } from "./userSlice";
 import { getUserById, updateUser } from "@/services/userService";
 import { getBookingsByUser } from "@/services/bookingService";
 import { getRoomById } from "@/services/roomService";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
+import { login as setUser } from "../LoginPage/authSlice"; // reuse login reducer to update user
 
 const genderOptions = [
   { label: "Nam", value: true },
@@ -24,7 +24,7 @@ const genderOptions = [
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
-  const userRedux = useSelector((state) => state.user.user);
+  const userRedux = useSelector((state) => state.auth.user);
   const [user, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({});
@@ -53,7 +53,7 @@ export default function ProfilePage() {
         setUserData(userInfo);
         setForm(userInfo);
         setBirthday(userInfo?.birthday ? new Date(userInfo.birthday) : null);
-        // Lấy danh sách đặt phòng
+
         const bookingRes = await getBookingsByUser(userInfo.id);
         setBookings(bookingRes.data.content);
         const roomRes = await Promise.all(
@@ -67,8 +67,7 @@ export default function ProfilePage() {
       }
     }
     fetchProfile();
-    // eslint-disable-next-line
-  }, []);
+  }, [dispatch, userRedux]);
 
   const handleEdit = () => setEditMode(true);
   const handleCancel = () => {
