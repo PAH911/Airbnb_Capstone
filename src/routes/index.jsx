@@ -1,42 +1,53 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-// USER
+// PAGE IMPORTS
 import LoginPage from "../pages/client-customer/LoginPage/LoginPage";
 import HomePage from "../pages/client-customer/HomePage/HomePage";
 import RoomListPage from "../pages/client-customer/RoomListPage/RoomListPage";
 import RoomDetailPage from "../pages/client-customer/RoomDetailPage/RoomDetailPage";
 import ProfilePage from "../pages/client-customer/ProfilePage/ProfilePage";
-
-// ADMIN
 import Dashboard from "../pages/client-admin/Dashboard/Dashboard";
+import CustomerLayout from "../pages/client-customer";
 
-import PrivateRoute from "./PrivateRoute";
-import AdminRoute from "./AdminRoute";
-import CustomerLayout from "../pages/client-customer"; // import layout
+// ----- PROTECTED ROUTE COMPONENTS -----
+// Chỉ cho vào khi đã đăng nhập
+function PrivateRoute() {
+  const { user } = useSelector((state) => state.auth);
+  return user ? <Outlet /> : <Navigate to="/login" />;
+}
 
+// Chỉ cho vào khi đã đăng nhập và có quyền ADMIN
+function AdminRoute() {
+  const { user } = useSelector((state) => state.auth);
+  return user?.role === "ADMIN" ? <Outlet /> : <Navigate to="/" />;
+}
+
+// ----- ROUTE DEFINITION -----
 export default function AppRoutes() {
   return (
     <Routes>
+      {/* Customer Layout */}
       <Route path="/" element={<CustomerLayout />}>
         <Route index element={<HomePage />} />
         <Route path="rooms" element={<RoomListPage />} />
         <Route path="room/:id" element={<RoomDetailPage />} />
-        <Route path="profile" element={<ProfilePage />} />
+        <Route path="profile" element={<PrivateRoute />}>
+          <Route index element={<ProfilePage />} />
+        </Route>
       </Route>
 
-      {/* Public Routes */}
+      {/* Public Route */}
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Protected Route */}
-      <Route element={<PrivateRoute />}>{/* ... các route khác */}</Route>
-
-      {/* Admin Route */}
+      {/* Admin Layout */}
       <Route path="/admin" element={<AdminRoute />}>
         <Route index element={<Dashboard />} />
-        {/* More admin routes */}
+        {/* Thêm các route admin khác ở đây */}
       </Route>
 
+      {/* 404 fallback */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
