@@ -19,6 +19,7 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { login as loginThunk } from "./authSlice";
 
 const { Title } = Typography;
 
@@ -61,11 +62,8 @@ export default function LoginPage() {
   const onLogin = async (values) => {
     setLoading(true);
     try {
-      const res = await login(values);
-      const { token, user } = res.data.content;
-      localStorage.setItem("accessToken", token);
-      localStorage.setItem("userInfo", JSON.stringify(user));
-      dispatch(loginRedux(user));
+      const res = await dispatch(loginThunk(values)).unwrap(); // dùng unwrap để nhận kết quả
+      localStorage.setItem("userInfo", JSON.stringify(res)); // user đã được return ở asyncThunk
       notification.success({
         message: "Thành công!",
         description: "Đăng nhập thành công!",
@@ -77,7 +75,7 @@ export default function LoginPage() {
     } catch (err) {
       notification.error({
         message: "Lỗi đăng nhập",
-        description: "Vui lòng kiểm tra lại tài khoản hoặc mật khẩu.",
+        description: err || "Đăng nhập thất bại!",
         placement: "topRight",
         duration: 3,
         style: { borderRadius: 12, boxShadow: "0 4px 32px #f43f5e33" },
