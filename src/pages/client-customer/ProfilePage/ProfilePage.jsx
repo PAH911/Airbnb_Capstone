@@ -100,9 +100,9 @@ export default function ProfilePage() {
       }`}
     >
       <Header />
-      <main className="flex-1 flex flex-col items-center justify-center w-full">
+      <main className="flex-1 flex flex-col items-center justify-center w-full ">
         <motion.div
-          className="w-full max-w-6xl mx-auto px-4 py-10"
+          className="w-full max-w-6xl mx-auto px-4 py-10 "
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -163,12 +163,6 @@ export default function ProfilePage() {
                   {user?.birthday
                     ? format(new Date(user.birthday), "dd/MM/yyyy")
                     : "Chưa có"}
-                </div>
-                <div className="text-gray-500 text-xs mb-2">
-                  Bắt đầu tham gia năm{" "}
-                  {user?.createdAt
-                    ? new Date(user.createdAt).getFullYear()
-                    : ""}
                 </div>
                 <Button
                   variant="default"

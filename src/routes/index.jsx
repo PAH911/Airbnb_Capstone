@@ -10,6 +10,7 @@ import RoomDetailPage from "../pages/client-customer/RoomDetailPage/RoomDetailPa
 import ProfilePage from "../pages/client-customer/ProfilePage/ProfilePage";
 import Dashboard from "../pages/client-admin/Dashboard/Dashboard";
 import CustomerLayout from "../pages/client-customer";
+import SupportPage from "../pages/client-customer/SupportPage/SupportPage";
 
 // ----- PROTECTED ROUTE COMPONENTS -----
 // Chỉ cho vào khi đã đăng nhập
@@ -36,6 +37,7 @@ export default function AppRoutes() {
         <Route path="profile" element={<PrivateRoute />}>
           <Route index element={<ProfilePage />} />
         </Route>
+        <Route path="support" element={<SupportPage />} />
       </Route>
 
       {/* Public Route */}
