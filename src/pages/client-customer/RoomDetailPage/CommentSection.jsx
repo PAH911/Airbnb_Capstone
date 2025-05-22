@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCommentsByRoom, postComment } from "./commentSlice";
 import { motion } from "framer-motion";
 import { UserOutlined, SendOutlined } from "@ant-design/icons";
-import { Input, Button, Spin, message } from "antd";
+import { Input, Button, message } from "antd";
+
+const COMMENTS_PER_PAGE = 5;
 
 export default function CommentSection({ roomId }) {
   const dispatch = useDispatch();
@@ -12,9 +14,11 @@ export default function CommentSection({ roomId }) {
   );
   const user = useSelector((state) => state.auth.user);
   const [content, setContent] = useState("");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     if (roomId) dispatch(fetchCommentsByRoom(roomId));
+    setPage(1); // Reset page khi đổi phòng
   }, [roomId, dispatch]);
 
   useEffect(() => {
@@ -37,6 +41,13 @@ export default function CommentSection({ roomId }) {
     setContent("");
   };
 
+  // Phân trang bình luận
+  const totalPages = Math.ceil(list.length / COMMENTS_PER_PAGE);
+  const pagedComments = list.slice(
+    (page - 1) * COMMENTS_PER_PAGE,
+    page * COMMENTS_PER_PAGE
+  );
+
   return (
     <section className="mt-10">
       <motion.h2
@@ -48,39 +59,44 @@ export default function CommentSection({ roomId }) {
         Bình luận
       </motion.h2>
       <div className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Input.TextArea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Viết bình luận của bạn..."
-            autoSize={{ minRows: 2, maxRows: 4 }}
-            className="rounded-xl bg-white dark:bg-[#23232b] text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700"
-            disabled={posting}
-          />
-          <Button
-            type="primary"
-            icon={<SendOutlined />}
-            loading={posting}
-            className="rounded-xl bg-rose-500 border-none hover:!bg-rose-600 ml-2"
-            onClick={handleSubmit}
-          >
-            Gửi
-          </Button>
-        </div>
-        {!user && (
-          <div className="text-sm text-gray-400">* Đăng nhập để bình luận</div>
+        {user ? (
+          <div className="flex items-center gap-3 mb-2">
+            <Input.TextArea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Viết bình luận của bạn..."
+              autoSize={{ minRows: 2, maxRows: 4 }}
+              className="rounded-xl bg-white dark:bg-[#23232b] text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700"
+              disabled={posting}
+            />
+            <Button
+              type="primary"
+              icon={<SendOutlined />}
+              loading={posting}
+              className="rounded-xl bg-rose-500 border-none hover:!bg-rose-600 ml-2"
+              onClick={handleSubmit}
+            >
+              Gửi
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div className="text-sm text-gray-400">
+              * Đăng nhập để bình luận
+            </div>
+          </>
         )}
       </div>
       {loading ? (
-        <Spin size="large" />
+        <div>Đang tải bình luận...</div>
       ) : error ? (
         <div className="text-red-500">{error}</div>
       ) : (
         <div className="space-y-6">
-          {list.length === 0 ? (
+          {pagedComments.length === 0 ? (
             <div className="text-gray-400 italic">Chưa có bình luận nào.</div>
           ) : (
-            list.map((cmt, i) => (
+            pagedComments.map((cmt, i) => (
               <motion.div
                 key={cmt.id || i}
                 className="flex gap-4 items-start bg-white dark:bg-[#18181c] rounded-2xl p-4 shadow border border-gray-100 dark:border-gray-800"
@@ -116,6 +132,27 @@ export default function CommentSection({ roomId }) {
               </motion.div>
             ))
           )}
+        </div>
+      )}
+      {/* Pagination tabs */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-8">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              className={`px-3 py-1.5 rounded-full font-semibold text-base shadow border
+                ${
+                  page === i + 1
+                    ? "bg-rose-500 text-white border-rose-400"
+                    : "bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-700"
+                }`}
+              onClick={() => {
+                setPage(i + 1);
+              }}
+            >
+              {i + 1}
+            </button>
+          ))}
         </div>
       )}
     </section>

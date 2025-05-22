@@ -19,7 +19,6 @@ import { logout } from "../pages/client-customer/LoginPage/authSlice";
 const menuItems = [
   { key: "home", label: <Link to="/">Trang chủ</Link> },
   { key: "rooms", label: <Link to="/rooms">Phòng</Link> },
-  { key: "locations", label: <Link to="/locations">Địa điểm</Link> },
   { key: "support", label: <Link to="/support">Hỗ trợ</Link> },
 ];
 
@@ -64,7 +63,6 @@ export default function Header({ user: userProp }) {
   const activeKey = (() => {
     if (location.pathname === "/") return "home";
     if (location.pathname.startsWith("/rooms")) return "rooms";
-    if (location.pathname.startsWith("/locations")) return "locations";
     if (location.pathname.startsWith("/support")) return "support";
     return "";
   })();
@@ -91,7 +89,7 @@ export default function Header({ user: userProp }) {
           </span>
         </Link>
         {/* Menu center */}
-        <nav className="hidden lg:flex items-center gap-2 bg-white dark:bg-gray-800 rounded-full shadow px-2 py-1 border border-gray-200 dark:border-gray-700 transition-colors">
+        <nav className="hidden lg:flex items-center gap-2 bg-white dark:bg-gray-800 rounded-full shadow px-2 py-1 border border-gray-200 dark:border-gray-700 transition-colors ">
           {menuItems.map((item) => (
             <div
               key={item.key}

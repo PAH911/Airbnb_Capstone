@@ -12,4 +12,12 @@ const axiosInstance = axios.create({
   },
 });
 
+axiosInstance.interceptors.request.use((config) => {
+  const accessToken = localStorage.getItem("accessToken");
+  if (accessToken) {
+    config.headers.token = accessToken;
+  }
+  return config;
+});
+
 export default axiosInstance;

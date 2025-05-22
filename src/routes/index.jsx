@@ -8,6 +8,8 @@ import RoomDetailPage from "../pages/client-customer/RoomDetailPage/RoomDetailPa
 import ProfilePage from "../pages/client-customer/ProfilePage/ProfilePage";
 import CustomerLayout from "../pages/client-customer";
 import Support from "../pages/client-customer/SupportPage/SupportPage";
+import BookingPage from "../pages/client-customer/BookingPage/BookingPage";
+import LocationPage from "../pages/client-customer/LocationPage/LocationPage";
 
 import AdminLayout from "@/layouts/AdminLayouts";
 import Dashboard from "@/pages/client-admin/Dashboard/Dashboard";
@@ -29,6 +31,8 @@ export default function AppRoutes() {
 
       {/* Public */}
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/booking" element={<BookingPage />} />
+      <Route path="/location" element={<LocationPage />} />
 
       {/* Trang đăng nhập admin */}
       <Route path="/auth" element={<AuthPage />} />

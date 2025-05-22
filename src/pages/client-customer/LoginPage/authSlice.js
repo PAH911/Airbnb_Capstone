@@ -7,7 +7,10 @@ export const login = createAsyncThunk(
     try {
       const response = await authService.login(credentials);
       localStorage.setItem("accessToken", response.data.content.token);
-      return response.data.content.user;
+      return {
+        user: response.data.content.user,
+        token: response.data.content.token,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
@@ -34,7 +37,8 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;

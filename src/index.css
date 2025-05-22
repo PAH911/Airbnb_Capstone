@@ -1,34 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "leaflet/dist/leaflet.css";
+
 /* ĐỔI MÀU ACTIVE MENU ANT DESIGN (DARK) */
 .ant-menu-dark .ant-menu-item-selected,
 .ant-menu-dark .ant-menu-submenu-selected {
   background-color: #353941 !important; /* Màu nền item active */
-  color: #ffb92c !important;           /* Màu chữ và icon item active (cam vàng) */
+  color: #ffb92c !important; /* Màu chữ và icon item active (cam vàng) */
 }
 
 .ant-menu-dark .ant-menu-item-selected svg,
 .ant-menu-dark .ant-menu-submenu-selected svg {
-  color: #ffb92c !important;           /* Đổi màu icon khi active */
+  color: #ffb92c !important; /* Đổi màu icon khi active */
 }
 
 .custom-ant-table .ant-table-thead > tr > th {
-    background: #23272F;
-    color: #ffb92c;
-    font-weight: bold;
-    font-size: 16px;
-    border-bottom: 2px solid #252B36;
-  }
-  .custom-ant-table .ant-table-tbody > tr > td {
-    background: #212836;
-    color: #F4F6F8;
-    border-bottom: 1px solid #31394e;
-  }
-  .custom-ant-table .ant-table-tbody > tr.ant-table-row:hover > td {
-    background: #282f41 !important;
-  }
-  .custom-ant-table .ant-table-row-selected > td {
-    background: #31394e !important;
-  }
-  
+  background: #23272f;
+  color: #ffb92c;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 2px solid #252b36;
+}
+.custom-ant-table .ant-table-tbody > tr > td {
+  background: #212836;
+  color: #f4f6f8;
+  border-bottom: 1px solid #31394e;
+}
+.custom-ant-table .ant-table-tbody > tr.ant-table-row:hover > td {
+  background: #282f41 !important;
+}
+.custom-ant-table .ant-table-row-selected > td {
+  background: #31394e !important;
+}
