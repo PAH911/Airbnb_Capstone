@@ -10,7 +10,12 @@ import { MdAdminPanelSettings } from "react-icons/md";
 export default function AuthPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, loading } = useSelector((state) => state.adminlogin);
+  // Sửa lỗi destructure khi state.adminlogin chưa khởi tạo
+  const adminlogin = useSelector((state) => state.adminlogin) || {
+    user: null,
+    loading: false,
+  };
+  const { user, loading } = adminlogin;
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [focus, setFocus] = useState({ email: false, password: false });
@@ -30,8 +35,8 @@ export default function AuthPage() {
     e.preventDefault();
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-      const res = await dispatch(loginAdmin(form));
-      console.log("=== login result ===", res);
+    const res = await dispatch(loginAdmin(form));
+    console.log("=== login result ===", res);
 
     // Lấy user đúng chuẩn từ payload
     const userRes = res.payload?.content?.user || res.payload?.user;
@@ -124,7 +129,11 @@ export default function AuthPage() {
           </div>
           <motion.button
             type="submit"
-            whileHover={{ scale: 1.035, backgroundColor: "#ffb92c", color: "#222" }}
+            whileHover={{
+              scale: 1.035,
+              backgroundColor: "#ffb92c",
+              color: "#222",
+            }}
             whileTap={{ scale: 0.97 }}
             disabled={loading}
             className="w-full bg-[#ffb92c] text-[#222] font-bold rounded-lg py-3 text-lg shadow transition-all disabled:opacity-50"
