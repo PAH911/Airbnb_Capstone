@@ -11,7 +11,7 @@ import authReducer from "../pages/client-customer/LoginPage/authSlice";
 import roomListReducer from "../pages/client-customer/RoomListPage/RoomListSlice";
 import adminUserReducer from "../pages/client-admin/UserManager/adminUserSlice";
 import adminRoomReducer from "../pages/client-admin/RoomManager/adminRoomSlice";
-import locationReducer from "../pages/client-admin/LocationManager/locationSlice";
+// import locationReducer from "../pages/client-admin/LocationManager/locationSlice";
 import adminBookingReducer from "../pages/client-admin/BookingManager/adminBookingSlice";
 import adminCommentReducer from "../pages/client-admin/CommentManager/adminCommentSlice";
 import userListReducer from "../pages/client-admin/UserManager/adminUserSlice";
@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
   comment: commentReducer,
   roomList: roomListReducer,
   roomDetail: roomDetailReducer,
-  location: locationReducer,
+  // location: locationReducer,
 
   adminUser: adminUserReducer,
   adminRoom: adminRoomReducer,
