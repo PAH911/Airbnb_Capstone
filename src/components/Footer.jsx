@@ -70,7 +70,7 @@ export default function Footer() {
             </Space>
           </Col>
           {/* Company */}
-          <Col xs={24} sm={12} md={6}>
+          <Col xs={24} sm={12} md={5} className="mt-3">
             <Title
               level={5}
               className="mb-3 !text-gray-900 dark:!text-white tracking-wide uppercase"
@@ -99,7 +99,7 @@ export default function Footer() {
             </Space>
           </Col>
           {/* Contact */}
-          <Col xs={24} sm={12} md={6}>
+          <Col xs={24} sm={12} md={9} className="mt-3">
             <Title
               level={5}
               className="mb-3 !text-gray-900 dark:!text-white tracking-wide uppercase"
@@ -120,7 +120,7 @@ export default function Footer() {
             </Space>
           </Col>
           {/* More */}
-          <Col xs={24} sm={12} md={6}>
+          <Col xs={24} sm={12} md={4} className="mt-3">
             <Title
               level={5}
               className="mb-3 !text-gray-900 dark:!text-white tracking-wide uppercase"
@@ -167,7 +167,7 @@ export default function Footer() {
             >
               <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
             </svg>
-            <span>by TripNest Team</span>
+            <span>by PAH113</span>
           </div>
         </div>
       </div>

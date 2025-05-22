@@ -1,30 +1,36 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
+import { useTheme } from "../../../contexts/ThemeContext";
+import { Player } from "@lordicon/react";
+
+import supportIcon from "../../../assets/lordicon/support.json";
+import faqIcon from "../../../assets/lordicon/faq.json";
+import privacyIcon from "../../../assets/lordicon/privacy.json";
+import callIcon from "../../../assets/lordicon/call.json";
 
 const supportTopics = [
   {
-    icon: "💬",
+    icon: supportIcon,
     title: "Hỗ trợ khách hàng",
     desc: "Liên hệ với đội ngũ hỗ trợ 24/7 của chúng tôi để được giải đáp mọi thắc mắc về đặt phòng, thanh toán, hoặc các vấn đề khác.",
     contact: "support@tripnest.vn",
   },
   {
-    icon: "📄",
+    icon: faqIcon,
     title: "Câu hỏi thường gặp",
     desc: "Xem các câu hỏi thường gặp về dịch vụ, chính sách hoàn tiền, và hướng dẫn sử dụng nền tảng TripNest.",
     contact: "FAQ & Hướng dẫn",
   },
   {
-    icon: "🔒",
+    icon: privacyIcon,
     title: "Bảo mật & Quyền riêng tư",
     desc: "Tìm hiểu về cách chúng tôi bảo vệ thông tin cá nhân và quyền riêng tư của bạn khi sử dụng TripNest.",
     contact: "privacy@tripnest.vn",
   },
   {
-    icon: "📞",
+    icon: callIcon,
     title: "Liên hệ khẩn cấp",
     desc: "Nếu bạn gặp sự cố khẩn cấp trong quá trình lưu trú, hãy gọi ngay số hotline của chúng tôi để được hỗ trợ kịp thời.",
     contact: "1900 1234",
@@ -32,17 +38,12 @@ const supportTopics = [
 ];
 
 export default function SupportPage() {
-  const theme = useSelector((state) => state.theme?.theme || "light");
+  const { theme } = useTheme();
+
   return (
-    <div
-      className={`min-h-screen flex flex-col ${
-        theme === "dark"
-          ? "bg-[#18181c] text-white"
-          : "bg-gradient-to-br from-rose-50 via-white to-pink-100 text-gray-900"
-      }`}
-    >
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 flex flex-col items-center justify-center w-full">
+      <main className="flex-1 flex flex-col items-center justify-center w-full dark:bg-[#101624]">
         <motion.div
           className="w-full max-w-5xl mx-auto px-4 py-12"
           initial={{ opacity: 0, y: 40 }}
@@ -50,7 +51,7 @@ export default function SupportPage() {
           transition={{ duration: 0.6 }}
         >
           <motion.h1
-            className="text-4xl md:text-5xl font-extrabold text-center mb-6"
+            className="text-4xl md:text-5xl font-extrabold text-center mb-6 dark:text-white"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -80,9 +81,13 @@ export default function SupportPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
-                <div className="text-5xl mb-4 animate-bounce-slow">
-                  {topic.icon}
-                </div>
+                <Player
+                  icon={topic.icon}
+                  size={60}
+                  autoplay
+                  loop
+                  style={{ marginBottom: "16px" }}
+                />
                 <div className="text-2xl font-bold mb-2 text-rose-500 dark:text-rose-300 text-center">
                   {topic.title}
                 </div>
@@ -101,8 +106,3 @@ export default function SupportPage() {
     </div>
   );
 }
-
-// Custom animation for icon
-// Add this to your global CSS if not present:
-// @keyframes bounce-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-// .animate-bounce-slow { animation: bounce-slow 2s infinite; }

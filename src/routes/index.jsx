@@ -7,6 +7,7 @@ import RoomListPage from "../pages/client-customer/RoomListPage/RoomListPage";
 import RoomDetailPage from "../pages/client-customer/RoomDetailPage/RoomDetailPage";
 import ProfilePage from "../pages/client-customer/ProfilePage/ProfilePage";
 import CustomerLayout from "../pages/client-customer";
+import Support from "../pages/client-customer/SupportPage/SupportPage";
 
 import AdminLayout from "@/layouts/AdminLayouts";
 import Dashboard from "@/pages/client-admin/Dashboard/Dashboard";
@@ -23,6 +24,7 @@ export default function AppRoutes() {
         <Route path="rooms" element={<RoomListPage />} />
         <Route path="room/:id" element={<RoomDetailPage />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="support" element={<Support />} />
       </Route>
 
       {/* Public */}
@@ -35,9 +37,10 @@ export default function AppRoutes() {
       <Route path="/admin" element={<AdminRoute />}>
         <Route element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
-          <Route path="users" element={<UserListPage />} />   {/* Thêm dòng này */}
-          <Route path="location" element={<LocationManager />} />   {/* Thêm dòng này */}
-
+          <Route path="users" element={<UserListPage />} />{" "}
+          {/* Thêm dòng này */}
+          <Route path="location" element={<LocationManager />} />{" "}
+          {/* Thêm dòng này */}
         </Route>
       </Route>
 

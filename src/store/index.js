@@ -1,7 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
-import { thunk } from "redux-thunk";
 
 // Reducers
 import userReducer from "../pages/client-customer/ProfilePage/userSlice";
@@ -9,7 +8,7 @@ import bookingReducer from "../pages/client-customer/BookingPage/bookingSlice";
 import commentReducer from "../pages/client-customer/RoomDetailPage/commentSlice";
 import roomDetailReducer from "../pages/client-customer/RoomDetailPage/roomDetailSlice";
 import authReducer from "../pages/client-customer/LoginPage/authSlice";
-
+import roomListReducer from "../pages/client-customer/RoomListPage/RoomListSlice";
 import adminUserReducer from "../pages/client-admin/UserManager/adminUserSlice";
 import adminRoomReducer from "../pages/client-admin/RoomManager/adminRoomSlice";
 import locationReducer from "../pages/client-admin/LocationManager/locationSlice";
@@ -29,6 +28,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   booking: bookingReducer,
   comment: commentReducer,
+  roomList: roomListReducer,
   roomDetail: roomDetailReducer,
 
   adminUser: adminUserReducer,

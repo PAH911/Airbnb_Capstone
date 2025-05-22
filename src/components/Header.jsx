@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button, Switch, Dropdown, Avatar } from "antd";
 import {
   GlobalOutlined,
@@ -27,6 +27,7 @@ export default function Header({ user: userProp }) {
   const navigate = useNavigate();
   const { theme, setTheme } = useContext(ThemeContext);
   const dispatch = useDispatch();
+  const location = useLocation();
   // Ưu tiên lấy user từ redux, nếu không có thì lấy từ prop (HomePage truyền vào)
   const userRedux = useSelector((state) => state.auth.user);
   const user = userRedux || userProp;
@@ -59,6 +60,14 @@ export default function Header({ user: userProp }) {
       icon: <LogoutOutlined />,
     },
   ];
+  // Xác định key đang active dựa vào pathname
+  const activeKey = (() => {
+    if (location.pathname === "/") return "home";
+    if (location.pathname.startsWith("/rooms")) return "rooms";
+    if (location.pathname.startsWith("/locations")) return "locations";
+    if (location.pathname.startsWith("/support")) return "support";
+    return "";
+  })();
   return (
     <header className="w-full bg-white/95 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-sm sticky top-0 z-50 transition-colors">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
@@ -83,16 +92,22 @@ export default function Header({ user: userProp }) {
         </Link>
         {/* Menu center */}
         <nav className="hidden lg:flex items-center gap-2 bg-white dark:bg-gray-800 rounded-full shadow px-2 py-1 border border-gray-200 dark:border-gray-700 transition-colors">
-          {menuItems.map((item, idx) => (
+          {menuItems.map((item) => (
             <div
               key={item.key}
-              className={`flex items-center px-6 py-2 cursor-pointer transition-all font-semibold text-base ${
-                idx === 0
-                  ? "border-b-4 border-rose-500 dark:border-rose-400 text-rose-600 dark:text-rose-400 rounded-full"
-                  : "text-gray-700 dark:text-gray-200"
-              } hover:bg-gray-50 hover:rounded-full dark:hover:bg-gray-700`}
+              className={`flex items-center px-6 py-2 cursor-pointer transition-all font-semibold text-base relative
+                ${
+                  activeKey === item.key
+                    ? "text-rose-600 dark:text-rose-400"
+                    : "text-gray-700 dark:text-gray-200"
+                }
+                hover:bg-gray-100 hover:rounded-full dark:hover:bg-gray-700
+              `}
             >
               {item.label}
+              {activeKey === item.key && (
+                <span className="absolute left-4 right-4 -bottom-1 h-[4px] bg-gradient-to-r from-rose-400 to-rose-500 rounded-b- animate-fade-in" />
+              )}
             </div>
           ))}
         </nav>
@@ -104,13 +119,8 @@ export default function Header({ user: userProp }) {
             onChange={(checked) => setTheme(checked ? "dark" : "light")}
             checkedChildren={<MoonFilled />}
             unCheckedChildren={<SunFilled />}
-            className="bg-gray-200 dark:bg-gray-700"
+            className="bg-gray-200 dark:bg-gray-700 hover:!bg-gray-300 dark:hover:!bg-gray-600"
             title="Toggle dark mode"
-          />
-          <Button
-            shape="circle"
-            icon={<GlobalOutlined />}
-            className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-xl border-none text-gray-700 dark:text-gray-200"
           />
           {/* User/Account */}
           {displayUser ? (
