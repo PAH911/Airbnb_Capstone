@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { login, register } from "../../../services/authService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { useDispatch } from "react-redux";
 import { login as loginRedux } from "./authSlice";
@@ -56,29 +56,26 @@ export default function LoginPage() {
   const [tab, setTab] = useState("login");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { darkMode } = useTheme();
   const dispatch = useDispatch();
 
   const onLogin = async (values) => {
     setLoading(true);
     try {
-      const res = await dispatch(loginThunk(values)).unwrap(); // dùng unwrap để nhận kết quả
-      notification.success({
-        message: "Thành công!",
-        description: "Đăng nhập thành công!",
-        placement: "topRight",
-        duration: 2,
-        style: { borderRadius: 12, boxShadow: "0 4px 32px #f43f5e33" },
-      });
-      navigate("/");
-    } catch (err) {
-      notification.error({
-        message: "Lỗi đăng nhập",
-        description: err || "Đăng nhập thất bại!",
-        placement: "topRight",
-        duration: 3,
-        style: { borderRadius: 12, boxShadow: "0 4px 32px #f43f5e33" },
-      });
+      // Đăng nhập qua redux-thunk để cập nhật user vào redux store
+      const result = await dispatch(loginThunk(values));
+      if (result.meta.requestStatus === "fulfilled") {
+        // Kiểm tra location.state.from để redirect về booking nếu có
+        if (location.state && location.state.from) {
+          navigate(location.state.from.pathname, {
+            state: location.state.from.state || undefined,
+            replace: true,
+          });
+        } else {
+          navigate("/", { replace: true });
+        }
+      }
     } finally {
       setLoading(false);
     }

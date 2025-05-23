@@ -29,7 +29,6 @@ function AppContent() {
   return (
     <div className={`theme-${currentTheme}`}>
       <Routes />
-      {/* ToastContainer ở cuối AppContent là tối ưu */}
       <ToastContainer
         position="top-right"
         autoClose={1500}

@@ -20,6 +20,7 @@ import {
   PopoverTrigger,
 } from "../../../components/ui/popover";
 import { Calendar } from "../../../components/ui/calendar";
+import { toast } from "react-toastify"; // Thêm toast thông báo
 
 export default function HeroSection() {
   const [locations, setLocations] = useState([]);
@@ -51,33 +52,50 @@ export default function HeroSection() {
       setDateRange({ from: null, to: null });
       return;
     }
-    // Nếu chỉ chọn 1 ngày nhiều lần, vẫn giữ object {from, to}
     setDateRange({ from: range.from || null, to: range.to || null });
   };
 
-  // Xử lý tìm kiếm phòng
+  // Xử lý tìm kiếm phòng (validate và chuyển trang)
   const handleSearch = async () => {
-    if (!locationId) return;
-    setLoading(true);
-    try {
-      const res = await roomService.getRoomsByLocation(locationId);
-      let rooms = res.data.content || [];
-      if (guests) rooms = rooms.filter((r) => r.khach >= guests);
-      navigate(
-        `/rooms?locationId=${locationId}` +
-          (dateRange.from
-            ? `&checkIn=${dayjs(dateRange.from).format("YYYY-MM-DD")}`
-            : "") +
-          (dateRange.to
-            ? `&checkOut=${dayjs(dateRange.to).format("YYYY-MM-DD")}`
-            : "") +
-          (guests ? `&guests=${guests}` : "")
-      );
-    } catch {
-      // handle error
-    } finally {
-      setLoading(false);
+    // Kiểm tra đủ trường
+    if (!locationId) {
+      toast.warn("Vui lòng chọn địa điểm!");
+      return;
     }
+    if (!dateRange.from || !dateRange.to) {
+      toast.warn("Vui lòng chọn ngày nhận phòng và trả phòng!");
+      return;
+    }
+    if (!guests || guests < 1) {
+      toast.warn("Vui lòng nhập số lượng khách hợp lệ!");
+      return;
+    }
+
+    // Gọi API tìm phòng theo locationId (và các filter khác nếu có)
+    const res = await roomService.getRoomsByLocation(locationId);
+    let rooms = res.data.content || [];
+    // Chọn phòng đầu tiên (ví dụ), thực tế bạn phải render danh sách rồi mới chọn phòng
+    const room = rooms[0]; // Đây là ví dụ
+
+    if (!room) {
+      toast.warn("Không tìm thấy phòng phù hợp!");
+      return;
+    }
+
+    // Tính tổng tiền & số đêm (ví dụ)
+    const nights = dayjs(dateRange.to).diff(dayjs(dateRange.from), "day");
+    const totalPrice = nights * room.giaTien;
+
+    navigate("/booking", {
+      state: {
+        room,
+        startDate: dayjs(dateRange.from).format("YYYY-MM-DD"),
+        endDate: dayjs(dateRange.to).format("YYYY-MM-DD"),
+        guests,
+        totalPrice,
+        nights,
+      },
+    });
   };
 
   // Helper: lấy label địa điểm đầy đủ
@@ -234,7 +252,6 @@ export default function HeroSection() {
                 size="lg"
                 className="bg-gradient-to-r from-rose-500 to-pink-500 dark:from-pink-700 dark:to-rose-400 hover:from-pink-500 hover:to-rose-500 border-none rounded-full h-12 text-lg font-semibold px-8 shadow-lg text-white"
                 onClick={handleSearch}
-                disabled={!locationId}
                 loading={loading || undefined}
               >
                 <Search className="w-5 h-5 mr-2" /> Tìm kiếm

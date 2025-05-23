@@ -15,11 +15,32 @@ export default function BookingPage() {
   const { loading, error, success } = useSelector((s) => s.booking);
   const user = useSelector((s) => s.auth.user);
 
-  if (!state) {
-    navigate("/");
-    return null;
+  if (!state || !state.room) {
+    // Có thể hiện 1 thông báo đẹp thay vì trả null, và không gọi navigate trong render (có thể gây lỗi)
+    return (
+      <div style={{ textAlign: "center", marginTop: 120, color: "red" }}>
+        Không có dữ liệu phòng để đặt.
+        <br />
+        <button
+          style={{
+            marginTop: 12,
+            background: "#f43f5e",
+            color: "#fff",
+            border: "none",
+            padding: "8px 18px",
+            borderRadius: 8,
+            cursor: "pointer",
+            fontWeight: 500,
+          }}
+          onClick={() => navigate("/")}
+        >
+          Quay về trang chủ
+        </button>
+      </div>
+    );
   }
-  const { room, startDate, endDate, guests, totalPrice, nights } = state;
+
+  const { room, startDate, endDate, guests, totalPrice, nights } = state || {};
 
   const sacombankQr = `https://img.vietqr.io/image/970403-060283876139-compact2.png?amount=${totalPrice}`;
 
@@ -29,7 +50,15 @@ export default function BookingPage() {
 
   const handleBooking = async () => {
     if (!user) {
-      message.warning("Bạn cần đăng nhập để đặt phòng");
+      // Redirect to /login, pass current location and state for redirect after login
+      navigate("/login", {
+        state: {
+          from: {
+            pathname: "/booking",
+            state: { ...state },
+          },
+        },
+      });
       return;
     }
     const payload = {
