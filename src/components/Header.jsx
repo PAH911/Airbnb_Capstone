@@ -27,9 +27,7 @@ export default function Header({ user: userProp }) {
   const { theme, setTheme } = useContext(ThemeContext);
   const dispatch = useDispatch();
   const location = useLocation();
-  // Ưu tiên lấy user từ redux, nếu không có thì lấy từ prop (HomePage truyền vào)
-  const userRedux = useSelector((state) => state.auth.user);
-  const user = userRedux || userProp;
+  const user = useSelector((state) => state.user.user);
   // Nếu user chưa có, thử lấy lại từ localStorage (khi reload trang)
   let displayUser = user;
   if (!displayUser && localStorage.getItem("accessToken")) {
@@ -50,7 +48,6 @@ export default function Header({ user: userProp }) {
         <span
           onClick={() => {
             dispatch(logout());
-            window.location.reload();
           }}
         >
           Đăng xuất

@@ -35,10 +35,16 @@ export const updateUserInfo = createAsyncThunk(
 // Upload avatar
 export const uploadAvatarThunk = createAsyncThunk(
   "user/uploadAvatar",
-  async ({ formData }, { rejectWithValue }) => {
+  async ({ formData, userId }, { rejectWithValue, dispatch }) => {
     try {
+      // Gọi API upload avatar
       const res = await uploadUserAvatarService(formData);
-      return res.data.content.avatar; // Trả về link avatar mới
+
+      // Sau khi upload thành công, fetch lại thông tin user mới nhất từ server
+      const userRes = await dispatch(fetchUser(userId)).unwrap();
+      // Cập nhật lại localStorage và trả về user mới nhất
+      localStorage.setItem("userInfo", JSON.stringify(userRes));
+      return userRes;
     } catch (err) {
       return rejectWithValue(
         err.response?.data?.message || "Lỗi upload avatar"
@@ -90,7 +96,7 @@ const userSlice = createSlice({
 
       // uploadAvatar
       .addCase(uploadAvatarThunk.fulfilled, (state, action) => {
-        state.user.avatar = action.payload;
+        state.user = action.payload;
       })
       .addCase(uploadAvatarThunk.rejected, (state, action) => {
         state.error = action.payload;
