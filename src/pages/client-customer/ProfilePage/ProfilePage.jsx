@@ -185,14 +185,18 @@ export default function ProfilePage() {
       }`}
     >
       <Header />
-      <div className="flex flex-row items-start py-12 px-2 flex-1 gap-12 max-w-7xl mx-auto">
+      <div className="flex flex-row items-start py-12 px-2 flex-1 gap-12 max-w-7xl mx-auto w-full">
         {/* Card Thông tin user */}
-        <Card className="w-full max-w-xl rounded-3xl shadow-2xl" bordered>
+        <Card
+          className="w-full max-w-xs rounded-3xl shadow-2xl border-none dark:bg-[#23232b] bg-white p-6 flex flex-col items-center gap-4"
+          bordered={false}
+          style={{ minWidth: 320 }}
+        >
           <div className="flex flex-col items-center gap-4">
             <Avatar
-              size={96}
+              size={100}
               src={user?.avatar}
-              className="bg-gradient-to-tr from-rose-500 to-pink-400 text-4xl"
+              className="bg-gradient-to-tr from-rose-500 to-pink-400 text-4xl border-4 border-white dark:border-[#23232b] shadow-lg"
               icon={
                 !user?.avatar && <span>{user?.name?.[0]?.toUpperCase()}</span>
               }
@@ -207,24 +211,25 @@ export default function ProfilePage() {
                 icon={<UploadOutlined />}
                 loading={avatarLoading}
                 size="small"
+                className="bg-gradient-to-r from-rose-500 to-pink-400 text-white border-none shadow hover:from-pink-500 hover:to-rose-400 dark:bg-[#23232b] dark:text-pink-200 dark:hover:bg-[#18181c]"
               >
                 Đổi avatar
               </Button>
             </Upload>
-            <div className="text-xl font-semibold">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white text-center">
               {user?.name || "Chưa có tên"}
             </div>
-            <div className="text-gray-500 text-sm">
+            <div className="text-gray-500 dark:text-gray-300 text-sm flex items-center gap-1">
               <MailOutlined /> {user?.email}
             </div>
-            <div className="text-gray-500 text-sm">
+            <div className="text-gray-500 dark:text-gray-300 text-sm flex items-center gap-1">
               <PhoneOutlined /> {user?.phone || "Chưa cập nhật"}
             </div>
-            <div className="text-gray-500 text-sm">
+            <div className="text-gray-500 dark:text-gray-300 text-sm flex items-center gap-1">
               {user?.gender === true ? <ManOutlined /> : <WomanOutlined />}
               {user?.gender === true ? "Nam" : "Nữ"}
             </div>
-            <div className="text-gray-500 text-sm">
+            <div className="text-gray-500 dark:text-gray-300 text-sm flex items-center gap-1">
               🎂{" "}
               {user?.birthday
                 ? dayjs(user.birthday).format("DD/MM/YYYY")
@@ -235,6 +240,7 @@ export default function ProfilePage() {
               shape="round"
               icon={<EditOutlined />}
               onClick={() => setEditModal(true)}
+              className="bg-gradient-to-r from-rose-500 to-pink-400 text-white border-none shadow hover:from-pink-500 hover:to-rose-400 dark:bg-[#23232b] dark:text-pink-200 dark:hover:bg-[#18181c] mt-2"
             >
               Chỉnh sửa hồ sơ
             </Button>
@@ -243,15 +249,19 @@ export default function ProfilePage() {
 
         {/* Danh sách phòng đã thuê */}
         <div className="w-full max-w-4xl">
-          <h2 className="text-2xl font-bold mb-4">Phòng đã thuê</h2>
-          <Row gutter={[24, 24]}>
+          <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+            Phòng đã thuê
+          </h2>
+          <Row gutter={[32, 32]}>
             {loading ? (
               <Col span={24}>
                 <div>Đang tải...</div>
               </Col>
             ) : bookings.length === 0 ? (
               <Col span={24}>
-                <div className="text-gray-500">Bạn chưa đặt phòng nào.</div>
+                <div className="text-gray-500 dark:text-gray-300">
+                  Bạn chưa đặt phòng nào.
+                </div>
               </Col>
             ) : (
               bookings.map((b, i) => {
@@ -262,17 +272,18 @@ export default function ProfilePage() {
                   <Col md={12} xs={24} key={b.id}>
                     <Card
                       hoverable
+                      className="rounded-2xl shadow-lg border-none bg-white dark:bg-[#23232b] transition-transform duration-200 hover:scale-[1.025]"
                       cover={
                         <img
                           alt={room.tenPhong}
                           src={room.hinhAnh}
-                          className="h-44 w-full object-cover rounded-xl"
+                          className="h-44 w-full object-cover rounded-xl shadow mb-2 transition-transform duration-200 hover:scale-105"
                         />
                       }
                     >
                       <Card.Meta
                         title={
-                          <span>
+                          <span className="font-semibold text-lg text-gray-900 dark:text-white">
                             {room.tenPhong}
                             <span className="ml-2 text-gray-400 text-xs font-normal">
                               (#{b.id})
@@ -280,9 +291,11 @@ export default function ProfilePage() {
                           </span>
                         }
                         description={
-                          <>
-                            <div className="truncate">{room.moTa}</div>
-                            <div className="text-gray-600 text-sm mt-1">
+                          <div className="flex flex-col gap-1">
+                            <div className="truncate text-gray-600 dark:text-gray-300">
+                              {room.moTa}
+                            </div>
+                            <div className="text-gray-600 dark:text-gray-300 text-sm mt-1">
                               <strong>Ngày nhận:</strong>{" "}
                               {dayjs(b.ngayDen).format("DD/MM/YYYY")}
                               <br />
@@ -293,14 +306,14 @@ export default function ProfilePage() {
                               <br />
                               <strong>Mã phòng:</strong> {b.maPhong}
                             </div>
-                            <div className="text-rose-500 font-bold mt-1">
+                            <div className="text-rose-500 dark:text-pink-400 font-bold mt-1">
                               {room.giaTien?.toLocaleString()}₫ / đêm
                             </div>
-                            <div className="text-pink-500 font-bold">
+                            <div className="text-pink-500 dark:text-pink-300 font-bold">
                               Tổng tiền: {total.toLocaleString()}₫ ({nights}{" "}
                               đêm)
                             </div>
-                          </>
+                          </div>
                         }
                       />
                     </Card>
@@ -314,11 +327,24 @@ export default function ProfilePage() {
 
       {/* Modal chỉnh sửa */}
       <Modal
-        title="Chỉnh sửa thông tin cá nhân"
+        title={
+          <span className="text-xl font-bold text-gray-900 dark:text-white">
+            Chỉnh sửa thông tin cá nhân
+          </span>
+        }
         open={editModal}
         onCancel={() => setEditModal(false)}
         footer={null}
         centered
+        className={theme === "dark" ? "dark-modal" : ""}
+        bodyStyle={{
+          background: theme === "dark" ? "#23232b" : "#fff",
+          borderRadius: 20,
+          boxShadow:
+            theme === "dark" ? "0 8px 32px #0008" : "0 8px 32px #f43f5e22",
+          padding: 32,
+        }}
+        style={{ borderRadius: 20, overflow: "hidden", maxWidth: 480 }}
       >
         <Form
           form={form}
@@ -333,42 +359,126 @@ export default function ProfilePage() {
           }}
         >
           <Form.Item
-            label="Họ tên"
+            label={
+              <span className="font-semibold text-gray-900 dark:text-gray-200">
+                Họ tên
+              </span>
+            }
             name="name"
             rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
           >
-            <Input />
+            <Input className="rounded-xl px-3 py-2 bg-white dark:bg-[#18181c] dark:text-white border border-gray-200 dark:border-gray-700 focus:border-rose-400 dark:focus:border-pink-400 transition-all duration-150" />
           </Form.Item>
-          <Form.Item label="Email" name="email">
-            <Input disabled />
+          <Form.Item
+            label={
+              <span className="font-semibold text-gray-900 dark:text-gray-200">
+                Email
+              </span>
+            }
+            name="email"
+          >
+            <Input
+              disabled
+              className="rounded-xl px-3 py-2 bg-white dark:bg-[#18181c] dark:text-white border border-gray-200 dark:border-gray-700"
+            />
           </Form.Item>
-          <Form.Item label="Số điện thoại" name="phone">
-            <Input />
+          <Form.Item
+            label={
+              <span className="font-semibold text-gray-900 dark:text-gray-200">
+                Số điện thoại
+              </span>
+            }
+            name="phone"
+          >
+            <Input className="rounded-xl px-3 py-2 bg-white dark:bg-[#18181c] dark:text-white border border-gray-200 dark:border-gray-700 focus:border-rose-400 dark:focus:border-pink-400 transition-all duration-150" />
           </Form.Item>
-          <Form.Item label="Giới tính" name="gender">
+          <Form.Item
+            label={
+              <span className="font-semibold text-gray-900 dark:text-gray-200">
+                Giới tính
+              </span>
+            }
+            name="gender"
+          >
             <Radio.Group
               options={genderOptions}
               optionType="button"
               buttonStyle="solid"
+              className="dark:bg-[#18181c]  [&_.ant-radio-button-wrapper]:rounded-xl [&_.ant-radio-button-wrapper]:!border-gray-200 [&_.ant-radio-button-wrapper]:dark:!border-gray-700 [&_.ant-radio-button-wrapper-checked]:!bg-gradient-to-r [&_.ant-radio-button-wrapper-checked]:from-rose-500 [&_.ant-radio-button-wrapper-checked]:to-pink-400 [&_.ant-radio-button-wrapper-checked]:!text-white"
             />
           </Form.Item>
-          <Form.Item label="Ngày sinh" name="birthday">
+          <Form.Item
+            label={
+              <span className="font-semibold text-gray-900 dark:text-gray-200">
+                Ngày sinh
+              </span>
+            }
+            name="birthday"
+          >
             <DatePicker
               format="DD/MM/YYYY"
               allowClear
               style={{ width: "100%" }}
               placeholder="Chọn ngày sinh"
+              className="rounded-xl px-3 py-2 bg-white dark:bg-[#18181c] dark:text-white border border-gray-200 dark:border-gray-700 w-full datepicker-darkmode-fix"
+              popupClassName={theme === "dark" ? "antd-datepicker-dark" : ""}
             />
           </Form.Item>
-          <div className="flex gap-2 justify-end">
-            <Button onClick={() => setEditModal(false)}>Hủy</Button>
-            <Button type="primary" htmlType="submit">
+          <div className="flex gap-3 justify-end mt-8">
+            <Button
+              onClick={() => setEditModal(false)}
+              className="rounded-xl px-6 py-2 font-semibold bg-gray-200 dark:bg-[#23232b] text-gray-700 dark:text-gray-200 border-none shadow-sm hover:bg-gray-300 dark:hover:bg-[#18181c] transition-colors duration-150"
+              style={{ minWidth: 80 }}
+            >
+              Hủy
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="rounded-xl px-6 py-2 font-semibold bg-gradient-to-r from-rose-500 to-pink-500 text-white border-none shadow hover:from-pink-600 hover:to-rose-500 dark:bg-gradient-to-r dark:from-pink-600 dark:to-rose-500 dark:text-white dark:hover:from-pink-500 dark:hover:to-rose-400 transition-colors duration-150"
+              style={{ minWidth: 80 }}
+            >
               Lưu
             </Button>
           </div>
         </Form>
       </Modal>
-
+      {/* Custom darkmode cho antd datepicker */}
+      <style>{`
+        .antd-datepicker-dark .ant-picker-panel {
+          background: #23232b !important;
+          color: #fff !important;
+        }
+        .antd-datepicker-dark .ant-picker-header {
+          background: #23232b !important;
+          color: #fff !important;
+        }
+        .antd-datepicker-dark .ant-picker-cell {
+          color: #e5e7eb !important;
+        }
+        .antd-datepicker-dark .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner,
+        .antd-datepicker-dark .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner,
+        .antd-datepicker-dark .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+          background: linear-gradient(90deg, #f43f5e, #ec4899) !important;
+          color: #fff !important;
+        }
+        .antd-datepicker-dark .ant-picker-cell-today .ant-picker-cell-inner {
+          border-radius: 0.5rem !important;
+          background: #374151 !important;
+          color: #fff !important;
+        }
+        .antd-datepicker-dark .ant-picker-cell:hover .ant-picker-cell-inner {
+          background: #f43f5e !important;
+          color: #fff !important;
+        }
+        .antd-datepicker-dark .ant-picker-footer {
+          background: #23232b !important;
+        }
+        .antd-datepicker-dark .ant-picker-input input {
+          background: #18181c !important;
+          color: #fff !important;
+        }
+      `}</style>
       <Footer />
     </div>
   );

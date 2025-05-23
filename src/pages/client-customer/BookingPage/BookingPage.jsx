@@ -53,13 +53,13 @@ export default function BookingPage() {
 
   return (
     <motion.div
-      className="min-h-screen flex justify-center items-center bg-gradient-to-br from-rose-50 via-white to-pink-100 dark:bg-[#18181c]"
+      className="min-h-screen flex justify-center items-center bg-gradient-to-br from-rose-50 via-white to-pink-100 dark:bg-gradient-to-br dark:from-[#18181c] dark:via-[#23232b] dark:to-[#18181c]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="w-full max-w-5xl rounded-3xl bg-white dark:bg-[#23232b] shadow-2xl px-12 py-10 flex flex-col md:flex-row gap-12"
+        className="w-full max-w-5xl rounded-3xl bg-white dark:bg-[#23232b] shadow-2xl dark:shadow-lg dark:shadow-black/40 px-12 py-10 flex flex-col md:flex-row gap-12 border border-gray-100 dark:border-[#33334a]"
         initial={{ scale: 0.92, y: 30 }}
         animate={{ scale: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 60 }}
@@ -74,9 +74,11 @@ export default function BookingPage() {
           <img
             src={room.hinhAnh}
             alt={room.tenPhong}
-            className="w-full h-64 rounded-xl object-cover shadow mb-3"
+            className="w-full h-64 rounded-xl object-cover shadow mb-3 dark:shadow dark:shadow-black/40 border border-gray-200 dark:border-[#33334a]"
           />
-          <div className="font-bold text-lg text-center">{room.tenPhong}</div>
+          <div className="font-bold text-lg text-center text-gray-900 dark:text-gray-100">
+            {room.tenPhong}
+          </div>
           <div className="text-gray-500 dark:text-gray-300 text-sm mb-1 text-center">
             {room.diaChi}
           </div>
@@ -85,7 +87,7 @@ export default function BookingPage() {
           </div>
           <Button
             onClick={handleBack}
-            className="rounded-full px-6 py-2 border-none shadow font-semibold text-base bg-white/80 hover:bg-rose-50 dark:bg-[#18181c] dark:hover:bg-rose-950 text-rose-500 hover:text-white hover:bg-gradient-to-r hover:from-rose-500 hover:to-pink-400 transition-all duration-200 flex items-center gap-2"
+            className="rounded-full px-6 py-2 border-none shadow font-semibold text-base bg-white/80 hover:bg-rose-50 dark:bg-[#23232b] dark:hover:bg-[#18181c] text-rose-500 hover:text-white hover:bg-gradient-to-r hover:from-rose-500 hover:to-pink-400 dark:text-rose-300 dark:hover:text-white transition-all duration-200 flex items-center gap-2"
             icon={<LeftOutlined />}
             size="large"
           >
@@ -100,45 +102,48 @@ export default function BookingPage() {
           transition={{ delay: 0.3 }}
         >
           <div>
-            <div className="font-bold text-rose-500 text-lg mb-1">
+            <div className="font-bold text-rose-500 text-lg mb-1 dark:text-pink-400">
               Thông tin đặt phòng
             </div>
             <div className="text-gray-800 dark:text-gray-100 text-base mb-1">
               Nhận phòng:{" "}
-              <span className="font-medium">
+              <span className="font-medium dark:text-pink-200">
                 {dayjs(startDate).format("DD/MM/YYYY")}
               </span>
             </div>
             <div className="text-gray-800 dark:text-gray-100 text-base mb-1">
               Trả phòng:{" "}
-              <span className="font-medium">
+              <span className="font-medium dark:text-pink-200">
                 {dayjs(endDate).format("DD/MM/YYYY")}
               </span>
             </div>
             <div className="text-gray-800 dark:text-gray-100 text-base mb-1">
-              Số khách: <span className="font-medium">{guests}</span>
+              Số khách:{" "}
+              <span className="font-medium dark:text-pink-200">{guests}</span>
             </div>
             <div className="text-gray-800 dark:text-gray-100 text-base mb-1">
-              Số đêm: <span className="font-medium">{nights}</span>
+              Số đêm:{" "}
+              <span className="font-medium dark:text-pink-200">{nights}</span>
             </div>
-            <div className="font-bold text-xl text-rose-600 mt-2">
+            <div className="font-bold text-xl text-rose-600 mt-2 dark:text-pink-400">
               Tổng tiền: {totalPrice?.toLocaleString()}₫
             </div>
           </div>
           <div>
-            <div className="font-semibold text-base mb-2">
+            <div className="font-semibold text-base mb-2 dark:text-gray-200">
               Thanh toán qua QR Code:
             </div>
             <div className="flex items-center gap-6">
               <img
                 src={sacombankQr}
                 alt="QR thanh toán Sacombank"
-                className="w-40 h-40 rounded-xl border-2 border-rose-300 shadow-lg"
+                className="w-40 h-40 rounded-xl border-2 border-rose-300 dark:border-pink-400 shadow-lg dark:shadow dark:shadow-black/40 bg-white dark:bg-[#23232b]"
               />
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-gray-500 dark:text-gray-300">
                 <span>
                   Quét mã để thanh toán bằng <b>Sacombank/MoMo/VietQR</b>.<br />
-                  Nội dung chuyển khoản: <b>{qrContent}</b>
+                  Nội dung chuyển khoản:{" "}
+                  <b className="dark:text-pink-200">{qrContent}</b>
                 </span>
               </div>
             </div>
@@ -146,17 +151,21 @@ export default function BookingPage() {
           <Button
             type="primary"
             loading={loading}
-            className="rounded-xl py-3 text-lg font-bold mt-4 shadow bg-gradient-to-r from-rose-500 to-pink-500 border-none hover:from-pink-600 hover:to-rose-500 hover:scale-105 transition-all duration-200"
+            className="rounded-xl py-3 text-lg font-bold mt-4 shadow bg-gradient-to-r from-rose-500 to-pink-500 border-none hover:from-pink-600 hover:to-rose-500 hover:scale-105 transition-all duration-200 dark:bg-gradient-to-r dark:from-pink-600 dark:to-rose-500 dark:text-white"
             onClick={handleBooking}
             size="large"
             block
           >
             Xác nhận đặt phòng
           </Button>
-          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+          {error && (
+            <div className="text-red-500 text-sm mt-2 dark:text-red-400">
+              {error}
+            </div>
+          )}
           {success && (
             <motion.div
-              className="text-green-600 font-bold mt-2"
+              className="text-green-600 font-bold mt-2 dark:text-green-400"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
             >

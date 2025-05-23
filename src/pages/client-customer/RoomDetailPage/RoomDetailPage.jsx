@@ -12,6 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./datepicker-custom.css"; // Tạo file này để custom giao diện cho darkmode
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../../contexts/ThemeContext";
+import { message, ConfigProvider, theme as antdTheme } from "antd";
 
 export default function RoomDetailPage() {
   const navigate = useNavigate();
@@ -92,6 +93,63 @@ export default function RoomDetailPage() {
       </div>
     );
   }
+
+  const handleBooking = () => {
+    if (!startDate || !endDate || guests < 1) {
+      ConfigProvider.config({
+        theme: {
+          token: {
+            colorBgElevated: currentTheme === "dark" ? "#23232b" : "#fff",
+            colorText: currentTheme === "dark" ? "#fff" : "#f43f5e",
+            borderRadius: 16,
+            fontSize: 18,
+          },
+          algorithm:
+            currentTheme === "dark"
+              ? antdTheme.darkAlgorithm
+              : antdTheme.defaultAlgorithm,
+        },
+      });
+      message.open({
+        type: "warning",
+        content: (
+          <div className="flex items-center gap-2 animate-fade-in-up">
+            <span>Vui lòng chọn ngày nhận phòng, trả phòng và số khách!</span>
+          </div>
+        ),
+        duration: 2.2,
+        className: "custom-antd-message",
+        style: {
+          background: currentTheme === "dark" ? "#23232b" : "#fff",
+          color: currentTheme === "dark" ? "#fff" : "#f43f5e",
+          border:
+            currentTheme === "dark"
+              ? "1.5px solid #31394e"
+              : "1.5px solid #f43f5e",
+          boxShadow: "0 4px 32px #f43f5e22",
+          fontWeight: 600,
+          fontSize: 18,
+          padding: 16,
+          minWidth: 340,
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          animation: "fadeInUp .5s",
+        },
+      });
+      return;
+    }
+    navigate("/booking", {
+      state: {
+        room,
+        startDate,
+        endDate,
+        guests,
+        totalPrice,
+        nights,
+      },
+    });
+  };
 
   // --- Giao diện chính ---
   return (
@@ -240,19 +298,7 @@ ${
                 </div>
                 <button
                   className="rounded-xl py-3 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-bold text-lg shadow mt-2 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 dark:focus:ring-rose-300"
-                  disabled={!startDate || !endDate || guests < 1}
-                  onClick={() =>
-                    navigate("/booking", {
-                      state: {
-                        room,
-                        startDate,
-                        endDate,
-                        guests,
-                        totalPrice,
-                        nights,
-                      },
-                    })
-                  }
+                  onClick={handleBooking}
                 >
                   Đặt phòng
                 </button>
@@ -298,6 +344,28 @@ ${
         <CommentSection roomId={room.id} />
       </main>
       <Footer />
+      {/* Thêm animation cho message */}
+      <style>
+        {`
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fadeInUp .5s;
+}
+.custom-antd-message {
+  border-radius: 16px !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  min-width: 340px;
+  padding: 16px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+`}
+      </style>
     </div>
   );
 }
