@@ -48,17 +48,33 @@ function AppContent() {
 }
 
 export default function App() {
+  const { theme: currentTheme } = useContext(ThemeContext);
   return (
     <ThemeProvider>
-      {/* Nếu muốn dùng dark theme cho AntD, bọc ConfigProvider ở đây luôn */}
       <ConfigProvider
         theme={{
-          algorithm: theme.darkAlgorithm,
-          token: {
-            colorPrimary: "#ffb92c",
-            colorBgContainer: "#212836",
-            colorText: "#F4F6F8",
-          },
+          token:
+            currentTheme === "dark"
+              ? {
+                  colorPrimary: "#ffb92c",
+                  colorTextBase: "#fff",
+                  colorBgBase: "#18181c",
+                  colorTextLightSolid: "#fff",
+                  colorBgContainer: "#23232b",
+                  colorBorder: "#31394e",
+                }
+              : {
+                  colorPrimary: "#f43f5e",
+                  colorTextBase: "#222",
+                  colorBgBase: "#fff",
+                  colorTextLightSolid: "#fff",
+                  colorBgContainer: "#fff",
+                  colorBorder: "#f0f0f0",
+                },
+          algorithm:
+            currentTheme === "dark"
+              ? theme.darkAlgorithm
+              : theme.defaultAlgorithm,
         }}
       >
         <AppContent />

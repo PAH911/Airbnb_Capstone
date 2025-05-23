@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRoomDetail } from "./roomDetailSlice";
@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./datepicker-custom.css"; // Tạo file này để custom giao diện cho darkmode
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../../../contexts/ThemeContext";
 
 export default function RoomDetailPage() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function RoomDetailPage() {
     loading,
     error,
   } = useSelector((state) => state.roomDetail);
-  const theme = useSelector((state) => state.theme?.theme || "light");
+  const { theme: currentTheme } = useContext(ThemeContext);
 
   // State đặt phòng
   const [startDate, setStartDate] = useState(null);
@@ -59,7 +60,7 @@ export default function RoomDetailPage() {
     return (
       <div
         className={`min-h-screen flex flex-col ${
-          theme === "dark"
+          currentTheme === "dark"
             ? "bg-[#18181c] text-white"
             : "bg-gradient-to-br from-rose-50 via-white to-pink-100 text-gray-900"
         }`}
@@ -76,7 +77,7 @@ export default function RoomDetailPage() {
     return (
       <div
         className={`min-h-screen flex flex-col ${
-          theme === "dark"
+          currentTheme === "dark"
             ? "bg-[#18181c] text-white"
             : "bg-gradient-to-br from-rose-50 via-white to-pink-100 text-gray-900"
         }`}
@@ -95,8 +96,8 @@ export default function RoomDetailPage() {
   // --- Giao diện chính ---
   return (
     <div
-      className={`min-h-screen flex flex-col ${
-        theme === "dark"
+      className={`min-h-screen flex flex-col theme-${currentTheme} ${
+        currentTheme === "dark"
           ? "bg-[#18181c] text-white"
           : "bg-gradient-to-br from-rose-50 via-white to-pink-100 text-gray-900"
       }`}
@@ -163,7 +164,9 @@ export default function RoomDetailPage() {
               </div>
               <div className="grid grid-cols-1 gap-4">
                 <div className="flex gap-2 items-center">
-                  <span className="font-semibold w-28">Nhận phòng:</span>
+                  <span className="font-semibold w-28 dark:text-gray-200">
+                    Nhận phòng:
+                  </span>
                   <DatePicker
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
@@ -173,11 +176,13 @@ export default function RoomDetailPage() {
                     minDate={new Date()}
                     dateFormat="dd/MM/yyyy"
                     placeholderText="Chọn ngày đến"
-                    className="w-full !rounded-lg !border-gray-200 !dark:border-gray-700 !bg-white !dark:bg-[#18181c] !text-gray-900 !dark:text-white px-3 py-1.5 focus:!border-rose-400"
+                    className="w-full !rounded-lg !border-gray-200 !dark:border-gray-700 !bg-white !dark:bg-[#18181c] !text-gray-900 !dark:text-white px-3 py-1.5 focus:!border-rose-400 !placeholder-gray-400 !dark:placeholder-gray-400"
                   />
                 </div>
                 <div className="flex gap-2 items-center">
-                  <span className="font-semibold w-28">Trả phòng:</span>
+                  <span className="font-semibold w-28 dark:text-gray-200">
+                    Trả phòng:
+                  </span>
                   <DatePicker
                     selected={endDate}
                     onChange={(date) => setEndDate(date)}
@@ -187,11 +192,13 @@ export default function RoomDetailPage() {
                     minDate={startDate || new Date()}
                     dateFormat="dd/MM/yyyy"
                     placeholderText="Chọn ngày đi"
-                    className="w-full !rounded-lg !border-gray-200 !dark:border-gray-700 !bg-white !dark:bg-[#18181c] !text-gray-900 !dark:text-white px-3 py-1.5 focus:!border-rose-400"
+                    className="w-full !rounded-lg !border-gray-200 !dark:border-gray-700 !bg-white !dark:bg-[#18181c] !text-gray-900 !dark:text-white px-3 py-1.5 focus:!border-rose-400 !placeholder-gray-400 !dark:placeholder-gray-400"
                   />
                 </div>
                 <div className="flex gap-2 items-center">
-                  <span className="font-semibold w-28">Số khách:</span>
+                  <span className="font-semibold w-28 dark:text-gray-200">
+                    Số khách:
+                  </span>
                   <input
                     type="number"
                     min={1}
@@ -205,12 +212,25 @@ export default function RoomDetailPage() {
                         )
                       )
                     }
-                    className="w-24 !rounded-lg !border-gray-200 !dark:border-gray-700 !bg-white !dark:bg-[#18181c] !text-gray-900 !dark:text-white px-3 py-1.5 focus:!border-rose-400"
+                    className={`w-24 !rounded-xl px-3 py-1.5 transition-all
+${
+  currentTheme === "dark"
+    ? "bg-[#18181c] text-white border-gray-700 placeholder-gray-400"
+    : "bg-white text-gray-900 border-gray-200 placeholder-gray-400"
+}
+`}
+                    style={{
+                      WebkitTextFillColor:
+                        currentTheme === "dark" ? "#fff" : undefined,
+                      backgroundColor:
+                        currentTheme === "dark" ? "#18181c" : undefined,
+                      colorScheme: currentTheme === "dark" ? "dark" : "light",
+                    }}
                   />
                 </div>
                 {/* Tổng tiền */}
                 <div className="flex items-center justify-between font-bold mt-1 text-base">
-                  <span>Tổng tiền:</span>
+                  <span className="dark:text-gray-200">Tổng tiền:</span>
                   <span className="text-rose-500 text-lg">
                     {totalPrice ? totalPrice.toLocaleString() + "₫" : "-"}
                   </span>
@@ -219,7 +239,7 @@ export default function RoomDetailPage() {
                   </span>
                 </div>
                 <button
-                  className="rounded-xl py-3 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-bold text-lg shadow mt-2 transition-all cursor-pointer"
+                  className="rounded-xl py-3 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-bold text-lg shadow mt-2 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 dark:focus:ring-rose-300"
                   disabled={!startDate || !endDate || guests < 1}
                   onClick={() =>
                     navigate("/booking", {

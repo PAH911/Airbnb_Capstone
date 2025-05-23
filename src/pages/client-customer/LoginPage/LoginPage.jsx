@@ -216,13 +216,15 @@ export default function LoginPage() {
                     {({ handleSubmit }) => (
                       <FormikForm onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                          <label className="font-semibold">Email</label>
+                          <label className="font-semibold dark:text-gray-200">
+                            Email
+                          </label>
                           <Field
                             name="email"
                             as={Input}
                             prefix={<MailOutlined />}
                             size="large"
-                            className="rounded-full focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all duration-300"
+                            className="rounded-full focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border-gray-300 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:focus:bg-gray-900 dark:focus:ring-rose-400"
                           />
                           <ErrorMessage
                             name="email"
@@ -231,13 +233,15 @@ export default function LoginPage() {
                           />
                         </div>
                         <div>
-                          <label className="font-semibold">Mật khẩu</label>
+                          <label className="font-semibold dark:text-gray-200">
+                            Mật khẩu
+                          </label>
                           <Field
                             name="password"
                             as={Input.Password}
                             prefix={<LockOutlined />}
                             size="large"
-                            className="rounded-full shadow focus:shadow-lg transition-all duration-300"
+                            className="rounded-full shadow focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border-gray-300 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:focus:bg-gray-900 dark:focus:ring-rose-400"
                           />
                           <ErrorMessage
                             name="password"
@@ -297,33 +301,37 @@ export default function LoginPage() {
                       <FormikForm onSubmit={handleSubmit}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
                           <div>
-                            <label className="font-semibold">Họ tên</label>
+                            <label className="font-semibold dark:text-gray-200">
+                              Họ tên
+                            </label>
                             <Field
                               name="name"
                               as={Input}
                               prefix={<UserOutlined />}
                               size="large"
-                              className="rounded-full shadow focus:shadow-lg transition-all duration-300"
+                              className="rounded-full shadow focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border-gray-300 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:focus:bg-gray-900 dark:focus:ring-rose-400"
                             />
                             <ErrorMessage
                               name="name"
                               component="div"
                               className="text-red-500 text-xs mt-1"
                             />
-                            <label className="font-semibold mt-2">Email</label>
+                            <label className="font-semibold mt-2 dark:text-gray-200">
+                              Email
+                            </label>
                             <Field
                               name="email"
                               as={Input}
                               prefix={<MailOutlined />}
                               size="large"
-                              className="rounded-full focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all duration-300"
+                              className="rounded-full focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border-gray-300 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:focus:bg-gray-900 dark:focus:ring-rose-400"
                             />
                             <ErrorMessage
                               name="email"
                               component="div"
                               className="text-red-500 text-xs mt-1"
                             />
-                            <label className="font-semibold mt-2">
+                            <label className="font-semibold mt-2 dark:text-gray-200">
                               Mật khẩu
                             </label>
                             <Field
@@ -331,14 +339,14 @@ export default function LoginPage() {
                               as={Input.Password}
                               prefix={<LockOutlined />}
                               size="large"
-                              className="rounded-full shadow focus:shadow-lg transition-all duration-300"
+                              className="rounded-full shadow focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border-gray-300 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:focus:bg-gray-900 dark:focus:ring-rose-400"
                             />
                             <ErrorMessage
                               name="password"
                               component="div"
                               className="text-red-500 text-xs mt-1"
                             />
-                            <label className="font-semibold mt-2">
+                            <label className="font-semibold mt-2 dark:text-gray-200">
                               Nhập lại mật khẩu
                             </label>
                             <Field
@@ -346,7 +354,7 @@ export default function LoginPage() {
                               as={Input.Password}
                               prefix={<LockOutlined />}
                               size="large"
-                              className="rounded-full shadow focus:shadow-lg transition-all duration-300"
+                              className="rounded-full shadow focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border-gray-300 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:focus:bg-gray-900 dark:focus:ring-rose-400"
                             />
                             <ErrorMessage
                               name="confirm"
@@ -355,21 +363,21 @@ export default function LoginPage() {
                             />
                           </div>
                           <div>
-                            <label className="font-semibold">
+                            <label className="font-semibold dark:text-gray-200">
                               Số điện thoại
                             </label>
                             <Field
                               name="phone"
                               as={Input}
                               size="large"
-                              className="rounded-full shadow focus:shadow-lg transition-all duration-300"
+                              className="rounded-full shadow focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border-gray-300 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:focus:bg-gray-900 dark:focus:ring-rose-400"
                             />
                             <ErrorMessage
                               name="phone"
                               component="div"
                               className="text-red-500 text-xs mt-1"
                             />
-                            <label className="font-semibold mt-2">
+                            <label className="font-semibold mt-2 dark:text-gray-200">
                               Ngày sinh
                             </label>
                             <Field
@@ -377,20 +385,20 @@ export default function LoginPage() {
                               as={Input}
                               type="date"
                               size="large"
-                              className="rounded-full shadow focus:shadow-lg transition-all duration-300"
+                              className="rounded-full shadow focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 border-gray-300 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:focus:bg-gray-900 dark:focus:ring-rose-400"
                             />
                             <ErrorMessage
                               name="birthday"
                               component="div"
                               className="text-red-500 text-xs mt-1"
                             />
-                            <label className="font-semibold mt-2">
+                            <label className="font-semibold mt-2 dark:text-gray-200">
                               Giới tính
                             </label>
                             <Field
                               name="gender"
                               as="select"
-                              className="w-full rounded-full shadow focus:shadow-lg transition-all duration-300 px-4 py-2"
+                              className="w-full rounded-full shadow focus:shadow-lg transition-all duration-300 px-4 py-2 bg-white text-gray-900 border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:focus:bg-gray-900 dark:focus:ring-rose-400"
                             >
                               <option value={true}>Nam</option>
                               <option value={false}>Nữ</option>
