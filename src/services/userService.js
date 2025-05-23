@@ -18,3 +18,11 @@ export const getCurrentUser = () => {
   const payload = JSON.parse(atob(token.split(".")[1]));
   return getUserById(payload.id); // dùng hàm có sẵn
 };
+// Upload avatar user
+export const uploadUserAvatar = (formData) => {
+  return axiosInstance.post(`/users/upload-avatar`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};

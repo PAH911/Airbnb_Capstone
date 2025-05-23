@@ -1,338 +1,348 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  DatePicker,
+  Radio,
+  Avatar,
+  message,
+  Card,
+  Row,
+  Col,
+  Upload,
+} from "antd";
+import {
   EditOutlined,
   MailOutlined,
   PhoneOutlined,
   ManOutlined,
   WomanOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
-import { getUserById, updateUser } from "@/services/userService";
+import dayjs from "dayjs";
 import { getBookingsByUser } from "@/services/bookingService";
 import { getRoomById } from "@/services/roomService";
-import { motion, AnimatePresence } from "framer-motion";
-import { format } from "date-fns";
-import { login as setUser } from "../LoginPage/authSlice";
+import {
+  setUser,
+  updateUserInfo,
+  uploadAvatarThunk,
+  fetchUser,
+} from "./userSlice";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const genderOptions = [
-  { label: "Nam", value: true },
-  { label: "Nữ", value: false },
+  { label: "Nam", value: true, icon: <ManOutlined /> },
+  { label: "Nữ", value: false, icon: <WomanOutlined /> },
 ];
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
-  const userRedux = useSelector((state) => state.auth.user);
-  const [user, setUserData] = useState(null);
-  const [editMode, setEditMode] = useState(false);
-  const [form, setForm] = useState({});
-  const [birthday, setBirthday] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const user = useSelector((state) => state.user.user);
+  const [editModal, setEditModal] = useState(false);
+  const [form] = Form.useForm();
+  const [avatarLoading, setAvatarLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [error, setError] = useState("");
-  const { darkMode } = useSelector((state) => state.theme || {});
+  const [loading, setLoading] = useState(true);
+  const { theme } = useTheme();
+  const userRedux =
+    useSelector((state) => state.auth.user) ||
+    useSelector((state) => state.user.user);
+  const [localHydrated, setLocalHydrated] = useState(false);
 
+  // 1. HYDRATE user từ localStorage vào Redux nếu bị null
   useEffect(() => {
+    if (!userRedux) {
+      const userStr = localStorage.getItem("userInfo");
+      if (userStr) {
+        try {
+          const userObj = JSON.parse(userStr);
+          if (userObj && userObj.id) {
+            dispatch(setUser(userObj));
+          }
+        } catch {
+          localStorage.removeItem("userInfo");
+        }
+      }
+    }
+    setLocalHydrated(true); // Đánh dấu đã hydrate
+  }, [userRedux, dispatch]);
+
+  // 2. FETCH user mới nhất từ API sau khi hydrate localStorage xong
+  useEffect(() => {
+    if (localHydrated && userRedux && userRedux.id) {
+      dispatch(fetchUser(userRedux.id))
+        .unwrap()
+        .then((userRes) => {
+          if (userRes && userRes.id) {
+            localStorage.setItem("userInfo", JSON.stringify(userRes));
+            dispatch(setUser(userRes));
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("userInfo");
+        });
+    }
+  }, [localHydrated, userRedux?.id, dispatch]);
+
+  // 3. FETCH BOOKINGS/ROOMS khi user đã sẵn sàng
+  useEffect(() => {
+    if (!user || !user.id) {
+      setBookings([]);
+      setRooms([]);
+      setLoading(false);
+      return;
+    }
     async function fetchProfile() {
       setLoading(true);
-      setError("");
+      form.setFieldsValue({
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        gender: user.gender,
+        birthday: user.birthday ? dayjs(user.birthday) : null,
+      });
       try {
-        let userInfo = userRedux;
-        if (!userInfo) {
-          const userStr = localStorage.getItem("userInfo");
-          if (userStr) userInfo = JSON.parse(userStr);
-        }
-        if (!userInfo) throw new Error("Không tìm thấy thông tin người dùng");
-        setUserData(userInfo);
-        setForm(userInfo);
-        setBirthday(userInfo?.birthday ? new Date(userInfo.birthday) : null);
-        // Lấy danh sách đặt phòng
-        const bookingRes = await getBookingsByUser(userInfo.id);
+        const bookingRes = await getBookingsByUser(user.id);
         setBookings(bookingRes.data.content);
         const roomRes = await Promise.all(
           bookingRes.data.content.map((b) => getRoomById(b.maPhong))
         );
         setRooms(roomRes.map((r) => r.data.content));
       } catch (err) {
-        setError("Không thể tải dữ liệu cá nhân hoặc phòng đã thuê");
-      } finally {
-        setLoading(false);
+        message.error(
+          "Không thể tải dữ liệu phòng đã thuê (user id không hợp lệ hoặc lỗi server)"
+        );
+        setBookings([]);
+        setRooms([]);
       }
+      setLoading(false);
     }
     fetchProfile();
-  }, [dispatch, userRedux]);
+  }, [user && user.id, form]);
 
-  const handleEdit = () => setEditMode(true);
-  const handleCancel = () => {
-    setEditMode(false);
-    setForm({ ...user });
-    setBirthday(user?.birthday ? new Date(user.birthday) : null);
-  };
-  const handleSave = async () => {
+  // Xử lý upload avatar
+  const handleAvatarChange = async (info) => {
+    setAvatarLoading(true);
+    const formData = new FormData();
+    formData.append("formFile", info.file);
     try {
-      const payload = {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        birthday: birthday ? format(birthday, "yyyy-MM-dd") : undefined,
-        gender: form.gender,
-        role: user.role || "USER",
-      };
-      await updateUser(user.id, payload); // PUT /api/users/{id}
-      setUserData({ ...user, ...payload });
-      setEditMode(false);
+      await dispatch(uploadAvatarThunk({ formData })).unwrap();
+      // Fetch user mới nhất từ API để đồng bộ avatar
+      const userRes = await dispatch(fetchUser(user.id)).unwrap();
+      dispatch(setUser(userRes));
+      localStorage.setItem("userInfo", JSON.stringify(userRes));
+      message.success("Cập nhật avatar thành công!");
+      setEditModal(false);
     } catch (err) {
-      setError("Lỗi cập nhật thông tin cá nhân");
+      message.error(err?.message || err || "Lỗi cập nhật avatar");
+    } finally {
+      setAvatarLoading(false);
     }
   };
+
+  // Xử lý update user info
+  const handleSave = async (values) => {
+    try {
+      const data = {
+        ...values,
+        birthday: values.birthday
+          ? dayjs(values.birthday).format("YYYY-MM-DD")
+          : undefined,
+        role: user.role || "USER",
+      };
+      await dispatch(updateUserInfo({ id: user.id, data })).unwrap();
+      // Fetch user mới nhất từ API để đồng bộ mọi thông tin
+      const userRes = await dispatch(fetchUser(user.id)).unwrap();
+      dispatch(setUser(userRes));
+      localStorage.setItem("userInfo", JSON.stringify(userRes));
+      message.success("Cập nhật thông tin thành công!");
+      setEditModal(false);
+    } catch (err) {
+      message.error(err?.message || err || "Lỗi cập nhật thông tin");
+    }
+  };
+
+  // Loading khi chưa có user
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-lg text-gray-500 dark:text-gray-300">
+        Đang tải thông tin người dùng...
+      </div>
+    );
+  }
 
   return (
     <div
       className={`min-h-screen flex flex-col ${
-        darkMode
-          ? "bg-[#18181c]"
-          : "bg-gradient-to-br from-rose-50 via-white to-pink-100"
+        theme === "dark"
+          ? "bg-[#18181c] text-white"
+          : "bg-gradient-to-br from-rose-50 via-white to-pink-100 text-gray-900"
       }`}
     >
       <Header />
-      <main className="flex-1 flex flex-col items-center justify-center w-full ">
-        <motion.div
-          className="w-full max-w-6xl mx-auto px-4 py-10 "
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <div className="grid md:grid-cols-2 gap-10 items-center min-h-[70vh]">
-            {/* Thông tin cá nhân */}
-            <motion.div
-              className={`rounded-3xl shadow-2xl p-12 flex flex-col items-center ${
-                darkMode
-                  ? "bg-[#23232b] text-white"
-                  : "bg-white/90 text-gray-900"
-              } border border-gray-200 dark:border-gray-800 backdrop-blur-lg`}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
+      <div className="flex flex-row items-start py-12 px-2 flex-1 gap-12 max-w-7xl mx-auto">
+        {/* Card Thông tin user */}
+        <Card className="w-full max-w-xl rounded-3xl shadow-2xl" bordered>
+          <div className="flex flex-col items-center gap-4">
+            <Avatar
+              size={96}
+              src={user?.avatar}
+              className="bg-gradient-to-tr from-rose-500 to-pink-400 text-4xl"
+              icon={
+                !user?.avatar && <span>{user?.name?.[0]?.toUpperCase()}</span>
+              }
+            />
+            <Upload
+              showUploadList={false}
+              beforeUpload={() => false}
+              customRequest={({ file }) => handleAvatarChange({ file })}
+              disabled={avatarLoading}
             >
-              {loading ? (
-                <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse mb-4" />
-              ) : (
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-rose-500 to-pink-400 flex items-center justify-center text-4xl font-bold text-white mb-2">
-                    {user?.avatar ? (
-                      <img
-                        src={user.avatar}
-                        alt="avatar"
-                        className="w-full h-full object-cover rounded-full"
-                      />
-                    ) : (
-                      user?.name?.[0]?.toUpperCase() || <UserOutlined />
-                    )}
-                  </div>
-                </motion.div>
-              )}
-              <div className="text-center">
-                <div className="text-xl font-semibold mb-1">
-                  {user?.name || "Không có tên"}
-                </div>
-                <div className="text-gray-400 dark:text-gray-300 text-sm mb-2 flex items-center justify-center gap-1">
-                  <MailOutlined className="mr-1" /> {user?.email || ""}
-                </div>
-                <div className="text-gray-400 dark:text-gray-300 text-sm mb-2 flex items-center justify-center gap-1">
-                  <PhoneOutlined className="mr-1" />{" "}
-                  {user?.phone || "Chưa cập nhật"}
-                </div>
-                <div className="text-gray-400 dark:text-gray-300 text-sm mb-2 flex items-center justify-center gap-1">
-                  {user?.gender === true ? (
-                    <ManOutlined className="mr-1" />
-                  ) : (
-                    <WomanOutlined className="mr-1" />
-                  )}{" "}
-                  {user?.gender === true ? "Nam" : "Nữ"}
-                </div>
-                <div className="text-gray-400 dark:text-gray-300 text-sm mb-2 flex items-center justify-center gap-1">
-                  🎂{" "}
-                  {user?.birthday
-                    ? format(new Date(user.birthday), "dd/MM/yyyy")
-                    : "Chưa có"}
-                </div>
-                <Button
-                  variant="default"
-                  className="rounded-full mt-2 w-full bg-gradient-to-r from-rose-500 to-pink-400 text-white font-semibold shadow-lg hover:scale-105 transition-transform"
-                  onClick={handleEdit}
-                  disabled={loading}
-                >
-                  <EditOutlined className="mr-1" /> Chỉnh sửa hồ sơ
-                </Button>
-              </div>
-            </motion.div>
-            {/* Modal chỉnh sửa */}
-            <AnimatePresence>
-              {editMode && (
-                <motion.div
-                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <motion.div
-                    className={`rounded-2xl p-8 w-full max-w-md shadow-2xl border ${
-                      darkMode
-                        ? "bg-[#23232b] text-white border-gray-700"
-                        : "bg-white text-gray-900 border-gray-200"
-                    }`}
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.8, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="text-xl font-bold mb-4 text-center">
-                      Chỉnh sửa thông tin cá nhân
-                    </div>
-                    <div className="space-y-4">
-                      <Input
-                        value={form.name || ""}
-                        onChange={(e) =>
-                          setForm((f) => ({ ...f, name: e.target.value }))
-                        }
-                        placeholder="Họ tên"
-                        className={darkMode ? "bg-[#18181c] text-white" : ""}
-                      />
-                      <Input
-                        value={form.email || ""}
-                        disabled
-                        placeholder="Email"
-                        className={darkMode ? "bg-[#18181c] text-white" : ""}
-                      />
-                      <Input
-                        value={form.phone || ""}
-                        onChange={(e) =>
-                          setForm((f) => ({ ...f, phone: e.target.value }))
-                        }
-                        placeholder="Số điện thoại"
-                        className={darkMode ? "bg-[#18181c] text-white" : ""}
-                      />
-                      <Calendar
-                        mode="single"
-                        selected={birthday}
-                        onSelect={setBirthday}
-                        className={darkMode ? "bg-[#18181c] text-white" : ""}
-                      />
-                      <div className="flex gap-4">
-                        {genderOptions.map((opt) => (
-                          <Button
-                            key={opt.value.toString()}
-                            variant={
-                              form.gender === opt.value ? "default" : "outline"
-                            }
-                            className={
-                              form.gender === opt.value
-                                ? "bg-rose-500 text-white"
-                                : darkMode
-                                ? "border-gray-600 text-white"
-                                : ""
-                            }
-                            onClick={() =>
-                              setForm((f) => ({ ...f, gender: opt.value }))
-                            }
-                          >
-                            {opt.label}
-                          </Button>
-                        ))}
-                      </div>
-                      <div className="flex gap-2 mt-6">
-                        <Button
-                          variant="secondary"
-                          className="flex-1"
-                          onClick={handleCancel}
-                        >
-                          Hủy
-                        </Button>
-                        <Button
-                          variant="default"
-                          className="flex-1 bg-gradient-to-r from-rose-500 to-pink-400 text-white"
-                          onClick={handleSave}
-                        >
-                          Lưu
-                        </Button>
-                      </div>
-                    </div>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            {/* Phòng đã thuê */}
-            <div className="w-full">
-              <div
-                className={`text-3xl font-bold mb-6 ${
-                  darkMode ? "text-white" : "text-gray-900"
-                }`}
+              <Button
+                icon={<UploadOutlined />}
+                loading={avatarLoading}
+                size="small"
               >
-                Phòng đã thuê
-              </div>
-              {error && <div className="text-red-500 mb-2">{error}</div>}
-              <div className="grid grid-cols-1 gap-6">
-                {loading ? (
-                  Array(2)
-                    .fill(0)
-                    .map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-48 bg-gray-100 dark:bg-gray-800 rounded-2xl animate-pulse"
+                Đổi avatar
+              </Button>
+            </Upload>
+            <div className="text-xl font-semibold">
+              {user?.name || "Chưa có tên"}
+            </div>
+            <div className="text-gray-500 text-sm">
+              <MailOutlined /> {user?.email}
+            </div>
+            <div className="text-gray-500 text-sm">
+              <PhoneOutlined /> {user?.phone || "Chưa cập nhật"}
+            </div>
+            <div className="text-gray-500 text-sm">
+              {user?.gender === true ? <ManOutlined /> : <WomanOutlined />}
+              {user?.gender === true ? "Nam" : "Nữ"}
+            </div>
+            <div className="text-gray-500 text-sm">
+              🎂{" "}
+              {user?.birthday
+                ? dayjs(user.birthday).format("DD/MM/YYYY")
+                : "Chưa có"}
+            </div>
+            <Button
+              type="primary"
+              shape="round"
+              icon={<EditOutlined />}
+              onClick={() => setEditModal(true)}
+            >
+              Chỉnh sửa hồ sơ
+            </Button>
+          </div>
+        </Card>
+
+        {/* Danh sách phòng đã thuê */}
+        <div className="w-full max-w-4xl">
+          <h2 className="text-2xl font-bold mb-4">Phòng đã thuê</h2>
+          <Row gutter={[24, 24]}>
+            {loading ? (
+              <Col span={24}>
+                <div>Đang tải...</div>
+              </Col>
+            ) : bookings.length === 0 ? (
+              <Col span={24}>
+                <div className="text-gray-500">Bạn chưa đặt phòng nào.</div>
+              </Col>
+            ) : (
+              bookings.map((b, i) => (
+                <Col md={12} xs={24} key={b.id}>
+                  <Card
+                    hoverable
+                    cover={
+                      <img
+                        alt={rooms[i]?.tenPhong}
+                        src={rooms[i]?.hinhAnh}
+                        className="h-44 w-full object-cover rounded-xl"
                       />
-                    ))
-                ) : bookings.length === 0 ? (
-                  <div className={darkMode ? "text-gray-400" : "text-gray-500"}>
-                    Bạn chưa đặt phòng nào.
-                  </div>
-                ) : (
-                  bookings.map((b, i) => (
-                    <motion.div
-                      key={b.id}
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: i * 0.1 }}
-                    >
-                      <div
-                        className={`rounded-2xl shadow-lg border-0 mb-4 overflow-hidden hover:scale-[1.03] transition-transform flex ${
-                          darkMode
-                            ? "bg-[#23232b] text-white"
-                            : "bg-white text-gray-900"
-                        }`}
-                      >
-                        <img
-                          src={rooms[i]?.hinhAnh}
-                          alt={rooms[i]?.tenPhong}
-                          className="h-40 w-40 object-cover flex-shrink-0"
-                        />
-                        <div className="p-4 flex-1">
-                          <div className="font-semibold text-lg mb-1">
-                            {rooms[i]?.tenPhong}
-                          </div>
-                          <div className="text-gray-400 dark:text-gray-300 text-sm mb-1 line-clamp-2">
-                            {rooms[i]?.moTa}
-                          </div>
-                          <div className="text-rose-500 font-bold">
+                    }
+                  >
+                    <Card.Meta
+                      title={rooms[i]?.tenPhong}
+                      description={
+                        <>
+                          <div className="truncate">{rooms[i]?.moTa}</div>
+                          <div className="text-rose-500 font-bold mt-1">
                             {rooms[i]?.giaTien?.toLocaleString()}₫ / tháng
                           </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))
-                )}
-              </div>
-            </div>
+                        </>
+                      }
+                    />
+                  </Card>
+                </Col>
+              ))
+            )}
+          </Row>
+        </div>
+      </div>
+
+      {/* Modal chỉnh sửa */}
+      <Modal
+        title="Chỉnh sửa thông tin cá nhân"
+        open={editModal}
+        onCancel={() => setEditModal(false)}
+        footer={null}
+        centered
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSave}
+          initialValues={{
+            name: user?.name,
+            email: user?.email,
+            phone: user?.phone,
+            gender: user?.gender,
+            birthday: user?.birthday ? dayjs(user.birthday) : null,
+          }}
+        >
+          <Form.Item
+            label="Họ tên"
+            name="name"
+            rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item label="Email" name="email">
+            <Input disabled />
+          </Form.Item>
+          <Form.Item label="Số điện thoại" name="phone">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Giới tính" name="gender">
+            <Radio.Group
+              options={genderOptions}
+              optionType="button"
+              buttonStyle="solid"
+            />
+          </Form.Item>
+          <Form.Item label="Ngày sinh" name="birthday">
+            <DatePicker
+              format="DD/MM/YYYY"
+              allowClear
+              style={{ width: "100%" }}
+              placeholder="Chọn ngày sinh"
+            />
+          </Form.Item>
+          <div className="flex gap-2 justify-end">
+            <Button onClick={() => setEditModal(false)}>Hủy</Button>
+            <Button type="primary" htmlType="submit">
+              Lưu
+            </Button>
           </div>
-        </motion.div>
-      </main>
+        </Form>
+      </Modal>
+
       <Footer />
     </div>
   );
