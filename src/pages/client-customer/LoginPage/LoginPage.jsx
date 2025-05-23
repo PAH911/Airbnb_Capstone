@@ -63,7 +63,6 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await dispatch(loginThunk(values)).unwrap(); // dùng unwrap để nhận kết quả
-      localStorage.setItem("userInfo", JSON.stringify(res)); // user đã được return ở asyncThunk
       notification.success({
         message: "Thành công!",
         description: "Đăng nhập thành công!",

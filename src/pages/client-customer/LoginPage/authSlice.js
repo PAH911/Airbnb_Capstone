@@ -6,7 +6,13 @@ export const login = createAsyncThunk(
   async (credentials, thunkAPI) => {
     try {
       const response = await authService.login(credentials);
+      // Lưu accessToken
       localStorage.setItem("accessToken", response.data.content.token);
+      // Lưu user vào localStorage cho các trang khác đọc được
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify(response.data.content.user)
+      );
       return {
         user: response.data.content.user,
         token: response.data.content.token,
@@ -27,7 +33,9 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem("accessToken");
+      localStorage.removeItem("userInfo"); // Xóa luôn userInfo
       state.user = null;
+      state.token = null;
     },
   },
   extraReducers: (builder) => {

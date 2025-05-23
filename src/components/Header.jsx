@@ -14,6 +14,7 @@ import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../pages/client-customer/LoginPage/authSlice";
+import { setUser } from "../pages/client-customer/ProfilePage/userSlice";
 
 // Sửa lại các tab menu cho phù hợp với trang đặt phòng online
 const menuItems = [
@@ -48,6 +49,8 @@ export default function Header({ user: userProp }) {
         <span
           onClick={() => {
             dispatch(logout());
+            dispatch(setUser(null)); // Xóa luôn Redux user
+            window.location.href = "/login";
           }}
         >
           Đăng xuất

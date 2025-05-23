@@ -132,11 +132,10 @@ export default function ProfilePage() {
     const formData = new FormData();
     formData.append("formFile", info.file);
     try {
-      await dispatch(uploadAvatarThunk({ formData })).unwrap();
-      // Fetch user mới nhất từ API để đồng bộ avatar
-      const userRes = await dispatch(fetchUser(user.id)).unwrap();
-      dispatch(setUser(userRes));
-      localStorage.setItem("userInfo", JSON.stringify(userRes));
+      const userUpdated = await dispatch(
+        uploadAvatarThunk({ formData, userId: user.id })
+      ).unwrap();
+      // Không cần fetchUser, đã đồng bộ Redux và localStorage rồi
       message.success("Cập nhật avatar thành công!");
       setEditModal(false);
     } catch (err) {
