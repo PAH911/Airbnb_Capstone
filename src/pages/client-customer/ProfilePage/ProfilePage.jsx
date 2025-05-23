@@ -254,32 +254,59 @@ export default function ProfilePage() {
                 <div className="text-gray-500">Bạn chưa đặt phòng nào.</div>
               </Col>
             ) : (
-              bookings.map((b, i) => (
-                <Col md={12} xs={24} key={b.id}>
-                  <Card
-                    hoverable
-                    cover={
-                      <img
-                        alt={rooms[i]?.tenPhong}
-                        src={rooms[i]?.hinhAnh}
-                        className="h-44 w-full object-cover rounded-xl"
-                      />
-                    }
-                  >
-                    <Card.Meta
-                      title={rooms[i]?.tenPhong}
-                      description={
-                        <>
-                          <div className="truncate">{rooms[i]?.moTa}</div>
-                          <div className="text-rose-500 font-bold mt-1">
-                            {rooms[i]?.giaTien?.toLocaleString()}₫ / tháng
-                          </div>
-                        </>
+              bookings.map((b, i) => {
+                const room = rooms[i] || {};
+                const nights = dayjs(b.ngayDi).diff(dayjs(b.ngayDen), "day");
+                const total = nights * (room.giaTien || 0);
+                return (
+                  <Col md={12} xs={24} key={b.id}>
+                    <Card
+                      hoverable
+                      cover={
+                        <img
+                          alt={room.tenPhong}
+                          src={room.hinhAnh}
+                          className="h-44 w-full object-cover rounded-xl"
+                        />
                       }
-                    />
-                  </Card>
-                </Col>
-              ))
+                    >
+                      <Card.Meta
+                        title={
+                          <span>
+                            {room.tenPhong}
+                            <span className="ml-2 text-gray-400 text-xs font-normal">
+                              (#{b.id})
+                            </span>
+                          </span>
+                        }
+                        description={
+                          <>
+                            <div className="truncate">{room.moTa}</div>
+                            <div className="text-gray-600 text-sm mt-1">
+                              <strong>Ngày nhận:</strong>{" "}
+                              {dayjs(b.ngayDen).format("DD/MM/YYYY")}
+                              <br />
+                              <strong>Ngày trả:</strong>{" "}
+                              {dayjs(b.ngayDi).format("DD/MM/YYYY")}
+                              <br />
+                              <strong>Số khách:</strong> {b.soLuongKhach}
+                              <br />
+                              <strong>Mã phòng:</strong> {b.maPhong}
+                            </div>
+                            <div className="text-rose-500 font-bold mt-1">
+                              {room.giaTien?.toLocaleString()}₫ / đêm
+                            </div>
+                            <div className="text-pink-500 font-bold">
+                              Tổng tiền: {total.toLocaleString()}₫ ({nights}{" "}
+                              đêm)
+                            </div>
+                          </>
+                        }
+                      />
+                    </Card>
+                  </Col>
+                );
+              })
             )}
           </Row>
         </div>
