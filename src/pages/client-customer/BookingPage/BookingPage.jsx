@@ -112,7 +112,18 @@ export default function BookingPage() {
             {room.diaChi}
           </div>
           <div className="text-yellow-500 font-bold text-base mb-2">
-            ★ {room.saoDanhGia || "5"}
+            {room.averageRating !== null ? (
+              <>
+                ★ {room.averageRating}
+                {room.totalComments > 0 && (
+                  <span className="text-gray-500 text-xs ml-1">
+                    ({room.totalComments} đánh giá)
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-gray-400 text-sm">Chưa có đánh giá</span>
+            )}
           </div>
           <Button
             onClick={handleBack}

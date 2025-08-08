@@ -1,0 +1,333 @@
+/* LoginPage Dark Theme CSS */
+
+/* General input field styling for light mode */
+.login-page .ant-input {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border-color: #d1d5db !important;
+  transition: all 0.3s ease !important;
+}
+
+.login-page .ant-input:focus,
+.login-page .ant-input:focus-visible,
+.login-page .ant-input-focused {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border-color: #d1d5db !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+.login-page .ant-input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Password input styling for light mode */
+.login-page .ant-input-password .ant-input {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border-color: #d1d5db !important;
+}
+
+.login-page .ant-input-password .ant-input:focus,
+.login-page .ant-input-password .ant-input:focus-visible,
+.login-page .ant-input-password .ant-input-focused {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border-color: #d1d5db !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+.login-page .ant-input-password .ant-input::placeholder {
+  color: #9ca3af !important;
+}
+
+.login-page .ant-input-password-icon {
+  color: #6b7280 !important;
+}
+
+/* Select dropdown styling for light mode */
+.login-page select {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border-color: #d1d5db !important;
+}
+
+.login-page select:focus {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border-color: #d1d5db !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+  outline: none !important;
+}
+
+.login-page select option {
+  background-color: white !important;
+  color: #1f2937 !important;
+}
+
+/* Dark mode overrides */
+.dark .login-page .ant-input {
+  background-color: #374151 !important;
+  color: white !important;
+  border-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .login-page .ant-input:focus,
+.dark .login-page .ant-input:focus-visible,
+.dark .login-page .ant-input-focused {
+  background-color: #1f2937 !important;
+  color: white !important;
+  border-color: #4b5563 !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.3) !important;
+}
+
+.dark .login-page .ant-input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Dark mode password input */
+.dark .login-page .ant-input-password .ant-input {
+  background-color: #374151 !important;
+  color: white !important;
+  border-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .login-page .ant-input-password .ant-input:focus,
+.dark .login-page .ant-input-password .ant-input:focus-visible,
+.dark .login-page .ant-input-password .ant-input-focused {
+  background-color: #1f2937 !important;
+  color: white !important;
+  border-color: #4b5563 !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.3) !important;
+}
+
+.dark .login-page .ant-input-password .ant-input::placeholder {
+  color: #9ca3af !important;
+}
+
+.dark .login-page .ant-input-password-icon {
+  color: #d1d5db !important;
+}
+
+/* Dark mode select dropdown */
+.dark .login-page select {
+  background-color: #374151 !important;
+  color: white !important;
+  border-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .login-page select:focus {
+  background-color: #1f2937 !important;
+  color: white !important;
+  border-color: #4b5563 !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.3) !important;
+  outline: none !important;
+}
+
+.dark .login-page select option {
+  background-color: #374151 !important;
+  color: white !important;
+}
+
+/* Input affix/prefix icons styling */
+.login-page .ant-input-prefix {
+  color: #6b7280 !important;
+}
+
+.dark .login-page .ant-input-prefix {
+  color: #d1d5db !important;
+}
+
+/* Input wrapper styling */
+.login-page .ant-input-affix-wrapper {
+  background-color: white !important;
+  border-color: #d1d5db !important;
+}
+
+.login-page .ant-input-affix-wrapper:focus,
+.login-page .ant-input-affix-wrapper:focus-within,
+.login-page .ant-input-affix-wrapper-focused {
+  background-color: white !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+.dark .login-page .ant-input-affix-wrapper {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .login-page .ant-input-affix-wrapper:focus,
+.dark .login-page .ant-input-affix-wrapper:focus-within,
+.dark .login-page .ant-input-affix-wrapper-focused {
+  background-color: #1f2937 !important;
+  border-color: #4b5563 !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.3) !important;
+}
+
+/* Password input wrapper */
+.login-page .ant-input-password {
+  background-color: white !important;
+  border-color: #d1d5db !important;
+}
+
+.login-page .ant-input-password:focus,
+.login-page .ant-input-password:focus-within,
+.login-page .ant-input-password-focused {
+  background-color: white !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+.dark .login-page .ant-input-password {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .login-page .ant-input-password:focus,
+.dark .login-page .ant-input-password:focus-within,
+.dark .login-page .ant-input-password-focused {
+  background-color: #1f2937 !important;
+  border-color: #4b5563 !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.3) !important;
+}
+
+/* Fix for autofill styling */
+.login-page .ant-input:-webkit-autofill,
+.login-page .ant-input:-webkit-autofill:hover,
+.login-page .ant-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #1f2937 !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.dark .login-page .ant-input:-webkit-autofill,
+.dark .login-page .ant-input:-webkit-autofill:hover,
+.dark .login-page .ant-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #374151 inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Date input specific styling */
+.login-page input[type="date"] {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border-color: #d1d5db !important;
+}
+
+.login-page input[type="date"]:focus {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+  outline: none !important;
+}
+
+.dark .login-page input[type="date"] {
+  background-color: #374151 !important;
+  color: white !important;
+  border-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .login-page input[type="date"]:focus {
+  background-color: #1f2937 !important;
+  color: white !important;
+  border-color: #4b5563 !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.3) !important;
+  outline: none !important;
+}
+
+/* Date input calendar icon color */
+.login-page input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+}
+
+.dark .login-page input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+}
+
+/* Error message styling */
+.login-page .ant-form-item-explain-error {
+  color: #ef4444 !important;
+}
+
+.dark .login-page .ant-form-item-explain-error {
+  color: #f87171 !important;
+}
+
+/* Button styling adjustments */
+.login-page .ant-btn-primary {
+  background-color: #f43f5e !important;
+  border-color: #f43f5e !important;
+  color: white !important;
+}
+
+.login-page .ant-btn-primary:hover {
+  background-color: #e11d48 !important;
+  border-color: #e11d48 !important;
+}
+
+.login-page .ant-btn-primary:focus {
+  background-color: #f43f5e !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+/* Form label styling */
+.login-page label {
+  color: #374151 !important;
+}
+
+.dark .login-page label {
+  color: #e5e7eb !important;
+}
+
+/* Loading spinner color adjustment */
+.login-page .ant-spin-dot-item {
+  background-color: #f43f5e !important;
+}
+
+/* Notification styling */
+.login-error-notification .ant-notification-notice {
+  background-color: #fee2e2 !important;
+  border-left: 4px solid #ef4444 !important;
+}
+
+.dark .login-error-notification .ant-notification-notice {
+  background-color: #1f2937 !important;
+  border-left: 4px solid #ef4444 !important;
+  color: white !important;
+}
+
+.login-error-notification .ant-notification-notice-message {
+  color: #dc2626 !important;
+  font-weight: 600 !important;
+}
+
+.dark .login-error-notification .ant-notification-notice-message {
+  color: #f87171 !important;
+}
+
+.login-error-notification .ant-notification-notice-description {
+  color: #7f1d1d !important;
+}
+
+.dark .login-error-notification .ant-notification-notice-description {
+  color: #fca5a5 !important;
+}

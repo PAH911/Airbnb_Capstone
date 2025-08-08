@@ -1,0 +1,379 @@
+/* Room Filter Modal Styling */
+
+/* Light theme cho modal */
+.room-filter-modal .ant-modal-content {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.room-filter-modal .ant-modal-header {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.room-filter-modal .ant-modal-body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Dark theme cho modal */
+.dark .room-filter-modal .ant-modal-content {
+  background-color: #1f2937 !important;
+  color: white !important;
+  border: 1px solid #374151 !important;
+}
+
+.dark .room-filter-modal .ant-modal-header {
+  background-color: #1f2937 !important;
+  border-bottom: 1px solid #374151 !important;
+}
+
+.dark .room-filter-modal .ant-modal-body {
+  background-color: #1f2937 !important;
+  color: white !important;
+}
+
+.dark .room-filter-modal .ant-modal-title {
+  color: white !important;
+}
+
+.dark .room-filter-modal .ant-modal-close {
+  color: white !important;
+}
+
+.dark .room-filter-modal .ant-modal-close:hover {
+  background-color: #374151 !important;
+}
+
+.dark .room-filter-modal .ant-modal-close-x {
+  color: white !important;
+}
+
+/* Slider styling */
+.custom-slider .ant-slider-rail {
+  background-color: #e5e7eb !important;
+}
+
+.dark .custom-slider .ant-slider-rail {
+  background-color: #4b5563 !important;
+}
+
+.custom-slider .ant-slider-track {
+  background-color: #f43f5e !important;
+}
+
+.custom-slider .ant-slider-handle {
+  border-color: #f43f5e !important;
+  background-color: #f43f5e !important;
+}
+
+.custom-slider .ant-slider-handle:hover {
+  border-color: #e11d48 !important;
+  background-color: #e11d48 !important;
+}
+
+.custom-slider .ant-slider-handle:focus {
+  border-color: #f43f5e !important;
+  background-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+/* Light theme cho input elements */
+.room-filter-modal .ant-input-number {
+  width: 100% !important;
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #000000 !important;
+}
+
+.room-filter-modal .ant-input-number:hover {
+  border-color: #9ca3af !important;
+}
+
+.room-filter-modal .ant-input-number:focus,
+.room-filter-modal .ant-input-number-focused {
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+.room-filter-modal .ant-input-number-input {
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+
+.room-filter-modal .ant-input-number-group-addon {
+  background-color: #f9fafb !important;
+  border-color: #d1d5db !important;
+  color: #000000 !important;
+}
+
+.room-filter-modal .ant-select-selector {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #000000 !important;
+}
+
+/* Dark theme cho input elements */
+.dark .room-filter-modal .ant-input-number {
+  width: 100% !important;
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+.dark .room-filter-modal .ant-input-number:hover {
+  border-color: #6b7280 !important;
+}
+
+.dark .room-filter-modal .ant-input-number:focus,
+.dark .room-filter-modal .ant-input-number-focused {
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+.dark .room-filter-modal .ant-input-number-input {
+  background-color: transparent !important;
+  color: white !important;
+}
+
+.dark .room-filter-modal .ant-input-number-group-addon {
+  background-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+/* Select styling */
+.dark .room-filter-modal .ant-select-selector {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+.dark .room-filter-modal .ant-select-selection-placeholder {
+  color: #9ca3af !important;
+}
+
+.dark .room-filter-modal .ant-select-arrow {
+  color: #9ca3af !important;
+}
+
+.dark .room-filter-modal .ant-select:hover .ant-select-selector {
+  border-color: #6b7280 !important;
+}
+
+.dark .room-filter-modal .ant-select-focused .ant-select-selector {
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+.dark .room-filter-modal .ant-select-selection-item {
+  color: white !important;
+}
+
+/* Dropdown styling */
+.dark .ant-select-dropdown {
+  background-color: #374151 !important;
+  border: 1px solid #4b5563 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .ant-select-item {
+  color: white !important;
+  border-bottom: 1px solid #4b5563 !important;
+}
+
+.dark .ant-select-item:last-child {
+  border-bottom: none !important;
+}
+
+.dark .ant-select-item-option-selected {
+  background-color: #f43f5e !important;
+  color: white !important;
+}
+
+.dark .ant-select-item-option-active {
+  background-color: #4b5563 !important;
+}
+
+/* Rate (Star) styling */
+.room-filter-modal .ant-rate-star {
+  color: #fbbf24 !important;
+}
+
+.room-filter-modal .ant-rate-star:not(.ant-rate-star-full) {
+  color: #d1d5db !important;
+}
+
+.dark .room-filter-modal .ant-rate-star:not(.ant-rate-star-full) {
+  color: #4b5563 !important;
+}
+
+/* Button styling */
+.room-filter-modal .ant-btn-default {
+  border-color: #d1d5db !important;
+  color: #374151 !important;
+}
+
+.dark .room-filter-modal .ant-btn-default {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+.dark .room-filter-modal .ant-btn-default:hover {
+  background-color: #4b5563 !important;
+  border-color: #6b7280 !important;
+  color: white !important;
+}
+
+.room-filter-modal .ant-btn-primary {
+  background-color: #f43f5e !important;
+  border-color: #f43f5e !important;
+}
+
+.room-filter-modal .ant-btn-primary:hover {
+  background-color: #e11d48 !important;
+  border-color: #e11d48 !important;
+}
+
+/* Tooltip styling */
+.dark .ant-tooltip {
+  z-index: 9999 !important;
+}
+
+.dark .ant-tooltip-inner {
+  background-color: #374151 !important;
+  color: white !important;
+  border: 1px solid #4b5563 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .ant-tooltip-arrow-content {
+  background-color: #374151 !important;
+}
+
+/* Clear button styling */
+.dark .room-filter-modal .ant-select-clear {
+  background-color: #4b5563 !important;
+  color: #9ca3af !important;
+}
+
+.dark .room-filter-modal .ant-select-clear:hover {
+  color: white !important;
+}
+
+/* Input group addon */
+.dark .room-filter-modal .ant-input-group-addon {
+  background-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+/* Animation for filter button */
+.filter-button {
+  transition: all 0.3s ease !important;
+}
+
+.filter-button:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.dark .filter-button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Filter active state */
+.filter-active {
+  background-color: #f43f5e !important;
+  border-color: #f43f5e !important;
+  color: white !important;
+}
+
+.filter-active:hover {
+  background-color: #e11d48 !important;
+  border-color: #e11d48 !important;
+}
+
+/* Badge for active filters count */
+.filter-badge {
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  background-color: #f43f5e !important;
+  color: white !important;
+  border-radius: 50% !important;
+  width: 20px !important;
+  height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border: 2px solid white !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dark .filter-badge {
+  border-color: #1f2937 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Loading và Empty state styling */
+.dark .room-filter-modal .ant-empty-description {
+  color: #9ca3af !important;
+}
+
+/* Mask styling cho modal */
+.dark .ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Focus states cho accessibility */
+.dark .room-filter-modal .ant-input-number:focus-within {
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+.dark .room-filter-modal .ant-select:focus-within .ant-select-selector {
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2) !important;
+}
+
+/* Button styling */
+.room-filter-modal .ant-btn {
+  border-radius: 6px !important;
+}
+
+.room-filter-modal .ant-btn[type="default"] {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #374151 !important;
+}
+
+.room-filter-modal .ant-btn[type="default"]:hover {
+  background-color: #f9fafb !important;
+  border-color: #9ca3af !important;
+}
+
+.dark .room-filter-modal .ant-btn[type="default"] {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+.dark .room-filter-modal .ant-btn[type="default"]:hover {
+  background-color: #4b5563 !important;
+  border-color: #6b7280 !important;
+}
+
+.room-filter-modal .ant-btn-primary {
+  background-color: #f43f5e !important;
+  border-color: #f43f5e !important;
+}
+
+.room-filter-modal .ant-btn-primary:hover {
+  background-color: #e11d48 !important;
+  border-color: #e11d48 !important;
+}

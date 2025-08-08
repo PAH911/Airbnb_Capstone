@@ -35,7 +35,8 @@ html body .custom-select .ant-select-arrow {
 body .custom-select .ant-select-selection-item,
 html body .custom-select .ant-select-selection-item {
   color: white !important;
-}om-search .ant-input-affix-wrapper,
+}
+om-search .ant-input-affix-wrapper,
 body .custom-search .ant-input-affix-wrapper-focused,
 body .custom-search .ant-input-affix-wrapper:focus,
 body .custom-search .ant-input-affix-wrapper:hover,
@@ -101,12 +102,30 @@ html body div .custom-search .ant-input-affix-wrapper {
 }
 
 /* Select Dark Theme - Ultimate Override */
-.custom-select .ant-select:not(.ant-select-customize-input) .ant-select-selector,
-.custom-select .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
-body .custom-select .ant-select:not(.ant-select-customize-input) .ant-select-selector,
-body .custom-select .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
-html body .custom-select .ant-select:not(.ant-select-customize-input) .ant-select-selector,
-html body .custom-select .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+.custom-select
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector,
+.custom-select
+  .ant-select-single:not(.ant-select-customize-input)
+  .ant-select-selector,
+body
+  .custom-select
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector,
+body
+  .custom-select
+  .ant-select-single:not(.ant-select-customize-input)
+  .ant-select-selector,
+html
+  body
+  .custom-select
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector,
+html
+  body
+  .custom-select
+  .ant-select-single:not(.ant-select-customize-input)
+  .ant-select-selector {
   background: #374151 !important;
   background-color: #374151 !important;
   border-color: #4b5563 !important;

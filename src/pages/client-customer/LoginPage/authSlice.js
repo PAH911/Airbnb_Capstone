@@ -18,7 +18,12 @@ export const login = createAsyncThunk(
         token: response.data.content.token,
       };
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.content ||
+          error.response?.data?.message ||
+          error.message ||
+          "Đăng nhập thất bại!"
+      );
     }
   }
 );

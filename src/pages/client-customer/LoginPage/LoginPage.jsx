@@ -13,43 +13,66 @@ import { login, register } from "../../../services/authService";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { useDispatch } from "react-redux";
-import { login as loginRedux } from "./authSlice";
+import { login as loginThunk } from "./authSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { login as loginThunk } from "./authSlice";
+import "./login-dark-theme.css";
 
 const { Title } = Typography;
 
 // Validation schemas
 const loginSchema = Yup.object().shape({
   email: Yup.string()
-    .email("Email không hợp lệ!")
-    .required("Vui lòng nhập email!"),
-  password: Yup.string().required("Vui lòng nhập mật khẩu!"),
+    .email(
+      "Email không hợp lệ! Vui lòng nhập đúng định dạng email (vd: user@example.com)"
+    )
+    .required("Email là bắt buộc!"),
+  password: Yup.string()
+    .min(6, "Mật khẩu phải có ít nhất 6 ký tự!")
+    .required("Mật khẩu là bắt buộc!"),
 });
 const registerSchema = Yup.object().shape({
-  name: Yup.string().required("Vui lòng nhập họ tên!"),
+  name: Yup.string()
+    .min(2, "Họ tên phải có ít nhất 2 ký tự!")
+    .max(50, "Họ tên không được quá 50 ký tự!")
+    .required("Họ tên là bắt buộc!"),
   email: Yup.string()
-    .email("Email không hợp lệ!")
-    .required("Vui lòng nhập email!"),
+    .email(
+      "Email không hợp lệ! Vui lòng nhập đúng định dạng email (vd: user@example.com)"
+    )
+    .required("Email là bắt buộc!"),
   password: Yup.string()
-    .required("Vui lòng nhập mật khẩu!")
+    .required("Mật khẩu là bắt buộc!")
     .min(8, "Mật khẩu tối thiểu 8 ký tự!")
     .matches(/[A-Z]/, "Mật khẩu phải có ít nhất 1 chữ hoa!")
     .matches(/[a-z]/, "Mật khẩu phải có ít nhất 1 chữ thường!")
     .matches(/[0-9]/, "Mật khẩu phải có ít nhất 1 số!")
-    .matches(/[@$!%*?&]/, "Mật khẩu phải có ký tự đặc biệt!"),
+    .matches(/[@$!%*?&]/, "Mật khẩu phải có ký tự đặc biệt (@$!%*?&)!"),
   confirm: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp!")
-    .required("Vui lòng nhập lại mật khẩu!"),
+    .oneOf([Yup.ref("password"), null], "Nhập lại mật khẩu không khớp!")
+    .required("Nhập lại mật khẩu là bắt buộc!"),
   phone: Yup.string()
-    .required("Vui lòng nhập số điện thoại!")
-    .matches(/^(0[0-9]{9,10})$/, "Số điện thoại không hợp lệ!"),
-  birthday: Yup.string().required("Vui lòng nhập ngày sinh!"),
-  gender: Yup.boolean().required("Vui lòng chọn giới tính!"),
+    .required("Số điện thoại là bắt buộc!")
+    .matches(
+      /^(0[0-9]{9,10})$/,
+      "Số điện thoại phải bắt đầu bằng 0 và có 10-11 chữ số!"
+    ),
+  birthday: Yup.string()
+    .required("Ngày sinh là bắt buộc!")
+    .test(
+      "is-past",
+      "Ngày sinh không thể là ngày trong tương lai!",
+      function (value) {
+        if (!value) return true;
+        const birthday = new Date(value);
+        const today = new Date();
+        return birthday <= today;
+      }
+    ),
+  gender: Yup.boolean().required("Giới tính là bắt buộc!"),
 });
 
 export default function LoginPage() {
@@ -66,6 +89,18 @@ export default function LoginPage() {
       // Đăng nhập qua redux-thunk để cập nhật user vào redux store
       const result = await dispatch(loginThunk(values));
       if (result.meta.requestStatus === "fulfilled") {
+        notification.success({
+          message: "Đăng nhập thành công!",
+          description: "Chào mừng bạn quay trở lại TripNest!",
+          placement: "topRight",
+          duration: 2,
+          style: {
+            borderRadius: 12,
+            boxShadow: "0 4px 32px rgba(34, 197, 94, 0.2)",
+            border: "1px solid #bbf7d0",
+          },
+        });
+
         // Kiểm tra location.state.from để redirect về booking nếu có
         if (location.state && location.state.from) {
           navigate(location.state.from.pathname, {
@@ -75,7 +110,38 @@ export default function LoginPage() {
         } else {
           navigate("/", { replace: true });
         }
+      } else {
+        // Xử lý lỗi đăng nhập với thông báo từ API
+        const errorMsg = result.payload || "Đăng nhập thất bại!";
+
+        notification.error({
+          message: "Đăng nhập thất bại",
+          description: errorMsg,
+          placement: "topRight",
+          duration: 4,
+          className: "login-error-notification",
+          style: {
+            borderRadius: 12,
+            boxShadow: "0 4px 32px rgba(239, 68, 68, 0.2)",
+            border: "1px solid #fecaca",
+          },
+        });
       }
+    } catch (err) {
+      console.error("Login error:", err);
+      notification.error({
+        message: "Đăng nhập thất bại",
+        description:
+          "Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại!",
+        placement: "topRight",
+        duration: 4,
+        className: "login-error-notification",
+        style: {
+          borderRadius: 12,
+          boxShadow: "0 4px 32px rgba(239, 68, 68, 0.2)",
+          border: "1px solid #fecaca",
+        },
+      });
     } finally {
       setLoading(false);
     }
@@ -86,24 +152,39 @@ export default function LoginPage() {
     try {
       await register(values);
       notification.success({
-        message: "Thành công!",
-        description: "Đăng ký thành công! Hãy đăng nhập.",
+        message: "Đăng ký thành công!",
+        description:
+          "Tài khoản của bạn đã được tạo. Hãy đăng nhập để tiếp tục.",
         placement: "topRight",
-        duration: 2,
-        style: { borderRadius: 12, boxShadow: "0 4px 32px #f43f5e33" },
+        duration: 3,
+        style: {
+          borderRadius: 12,
+          boxShadow: "0 4px 32px rgba(34, 197, 94, 0.2)",
+          border: "1px solid #bbf7d0",
+        },
       });
       setTab("login");
     } catch (err) {
-      const msg =
+      console.error("Register error:", err);
+
+      // Lấy thông báo lỗi từ API response
+      const errorMsg =
         err?.response?.data?.content ||
         err?.response?.data?.message ||
+        err?.message ||
         "Đăng ký thất bại!";
+
       notification.error({
-        message: "Lỗi đăng ký",
-        description: msg,
+        message: "Đăng ký thất bại",
+        description: errorMsg,
         placement: "topRight",
-        duration: 3,
-        style: { borderRadius: 12, boxShadow: "0 4px 32px #f43f5e33" },
+        duration: 4,
+        className: "login-error-notification",
+        style: {
+          borderRadius: 12,
+          boxShadow: "0 4px 32px rgba(239, 68, 68, 0.2)",
+          border: "1px solid #fecaca",
+        },
       });
     } finally {
       setLoading(false);
@@ -128,7 +209,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-between bg-gradient-to-br from-rose-200 via-pink-100 to-rose-400 dark:from-gray-900 dark:via-gray-800 dark:to-black transition-colors overflow-hidden">
+    <div className="login-page relative min-h-screen flex flex-col justify-between bg-gradient-to-br from-rose-200 via-pink-100 to-rose-400 dark:from-gray-900 dark:via-gray-800 dark:to-black transition-colors overflow-hidden">
       <Header />
       {/* Hiệu ứng nền động đẹp mắt */}
       <div className="pointer-events-none select-none">

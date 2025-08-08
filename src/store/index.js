@@ -15,6 +15,7 @@ import adminBookingReducer from "../pages/client-admin/BookingManager/adminBooki
 import adminCommentReducer from "../pages/client-admin/CommentManager/adminCommentSlice";
 import adminLoginReducer from "../pages/client-admin/AuthPage/authSlice";
 import locationReducer from "../pages/client-admin/LocationManager/locationSlice";
+import themeReducer from "./themeSlice";
 
 // Persist config
 const persistConfig = {
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   comment: commentReducer,
   roomList: roomListReducer,
   roomDetail: roomDetailReducer,
+  theme: themeReducer, // Thêm theme reducer
 
   userList: adminUserReducer, // Đổi tên từ adminUser thành userList để khớp với component
   adminRoom: adminRoomReducer,

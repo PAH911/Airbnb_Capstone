@@ -14,7 +14,7 @@ import { Button, Input, Select, Rate, message } from "antd";
 import { addComment } from "./adminCommentSlice";
 import { fetchRooms } from "../RoomManager/adminRoomSlice";
 import { fetchUserList } from "../UserManager/adminUserSlice";
-import './comment-dark-theme.css';
+import "./comment-dark-theme.css";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -154,41 +154,41 @@ export default function CommentAddModal({
                     border-color: #4b5563 !important;
                     color: white !important;
                   }
-                  
+
                   .custom-select .ant-select-selection-placeholder {
                     color: #9ca3af !important;
                   }
-                  
+
                   .custom-select .ant-select-arrow {
                     color: white !important;
                   }
-                  
+
                   .custom-select .ant-select-selection-item {
                     color: white !important;
                   }
-                  
+
                   .custom-dropdown {
                     background: #374151 !important;
                   }
-                  
+
                   .custom-dropdown .ant-select-item {
                     color: white !important;
                   }
-                  
+
                   .custom-dropdown .ant-select-item-option-selected {
                     background: #3b82f6 !important;
                   }
-                  
+
                   .custom-dropdown .ant-select-item-option-active {
                     background: #4b5563 !important;
                   }
-                  
+
                   .custom-textarea .ant-input {
                     background: #374151 !important;
                     border-color: #4b5563 !important;
                     color: white !important;
                   }
-                  
+
                   .custom-textarea .ant-input::placeholder {
                     color: #9ca3af !important;
                   }
