@@ -202,6 +202,7 @@ export default function UserManager() {
           showQuickJumper: true,
           showTotal: (total, range) =>
             `${range[0]}-${range[1]} của ${total} người dùng`,
+          style: { color: "#fff" },
         }}
         bordered
         size="middle"

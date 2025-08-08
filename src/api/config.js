@@ -7,12 +7,15 @@ export const TOKEN_CYBERSOFT =
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    TokenCybersoft: TOKEN_CYBERSOFT,
     "Content-Type": "application/json",
   },
 });
 
 axiosInstance.interceptors.request.use((config) => {
+  // Thêm tokenCybersoft (luôn có)
+  config.headers.tokenCybersoft = TOKEN_CYBERSOFT;
+
+  // Thêm token user nếu có
   const accessToken = localStorage.getItem("accessToken");
   if (accessToken) {
     config.headers.token = accessToken;
@@ -24,6 +27,15 @@ axiosInstance.interceptors.request.use((config) => {
     headers: config.headers,
     data: config.data,
   });
+
+  // Log cụ thể cho endpoint vi-tri
+  if (config.url.includes("vi-tri")) {
+    console.log("=== VI-TRI REQUEST DEBUG ===", {
+      token: accessToken,
+      headers: config.headers,
+      hasToken: !!accessToken,
+    });
+  }
 
   return config;
 });

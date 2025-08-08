@@ -34,18 +34,14 @@ export default function AdminSidebar({ collapsed, setCollapsed }) {
       key: "sub1",
       label: "Quản lý người dùng",
       icon: <SettingOutlined />,
-      children: [
-        { key: "/admin/users", label: "Danh sách người dùng" },
-      ],
+      children: [{ key: "/admin/users", label: "Danh sách người dùng" }],
     },
     !collapsed ? { label: "Chức năng", type: "group" } : { type: "divider" },
     {
       key: "sub2",
-      label: "Quản lý thông tin vị tr",
+      label: "Quản lý thông tin vị trí",
       icon: <SettingOutlined />,
-      children: [
-        { key: "/admin/location", label: "Danh sách vị trí" },
-      ],
+      children: [{ key: "/admin/location", label: "Danh sách vị trí" }],
     },
     !collapsed ? { label: "Hệ thống", type: "group" } : { type: "divider" },
     {

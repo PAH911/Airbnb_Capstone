@@ -14,6 +14,7 @@ import adminRoomReducer from "../pages/client-admin/RoomManager/adminRoomSlice";
 import adminBookingReducer from "../pages/client-admin/BookingManager/adminBookingSlice";
 import adminCommentReducer from "../pages/client-admin/CommentManager/adminCommentSlice";
 import adminLoginReducer from "../pages/client-admin/AuthPage/authSlice";
+import locationReducer from "../pages/client-admin/LocationManager/locationSlice";
 
 // Persist config
 const persistConfig = {
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   adminRoom: adminRoomReducer,
   adminBooking: adminBookingReducer,
   adminComment: adminCommentReducer,
+  location: locationReducer, // Thêm location reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
