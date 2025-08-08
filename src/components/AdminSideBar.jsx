@@ -43,16 +43,17 @@ export default function AdminSidebar({ collapsed, setCollapsed }) {
       icon: <SettingOutlined />,
       children: [{ key: "/admin/location", label: "Danh sách vị trí" }],
     },
-    !collapsed ? { label: "Hệ thống", type: "group" } : { type: "divider" },
     {
       key: "sub3",
-      label: "Tài khoản",
-      icon: <UserOutlined />,
-      children: [
-        { key: "/admin/your-course", label: "Khoá học đã tạo" },
-        { key: "/admin/profile", label: "Thông tin cá nhân" },
-        { key: "/admin/password", label: "Cập nhật mật khẩu" },
-      ],
+      label: "Quản lý phòng thuê",
+      icon: <SettingOutlined />,
+      children: [{ key: "/admin/rooms", label: "Danh sách phòng thuê" }],
+    },
+    {
+      key: "sub4",
+      label: "Quản lý bình luận",
+      icon: <SettingOutlined />,
+      children: [{ key: "/admin/comments", label: "Danh sách bình luận" }],
     },
     {
       key: "logout",

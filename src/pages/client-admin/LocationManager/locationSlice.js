@@ -9,7 +9,9 @@ export const fetchLocations = createAsyncThunk(
       const res = await axiosInstance.get("/vi-tri");
       return res.data.content;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Không tải được danh sách vị trí");
+      return rejectWithValue(
+        err.response?.data?.message || "Không tải được danh sách vị trí"
+      );
     }
   }
 );
@@ -22,15 +24,20 @@ export async function uploadLocationImage(maViTri, file) {
 
     // Lấy token từ localStorage
     const token = localStorage.getItem("accessToken") || "";
-    const tokenCybersoft = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA3OSIsIkhldEhhblN0cmluZyI6IjA1LzA5LzIwMjUiLCJIZXRIYW5UaW1lIjoiMTc1NzAzMDQwMDAwMCIsIm5iZiI6MTcyOTcyODAwMCwiZXhwIjoxNzU3MjAzMjAwfQ.8L6s48bhKNlI81VIJQ7GZJzwrZ2qGOzRK9OtGlTQ0VU";
+    const tokenCybersoft =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA3OSIsIkhldEhhblN0cmluZyI6IjA1LzA5LzIwMjUiLCJIZXRIYW5UaW1lIjoiMTc1NzAzMDQwMDAwMCIsIm5iZiI6MTcyOTcyODAwMCwiZXhwIjoxNzU3MjAzMjAwfQ.8L6s48bhKNlI81VIJQ7GZJzwrZ2qGOzRK9OtGlTQ0VU";
 
-    const res = await axiosInstance.post(`/vi-tri/upload-hinh-vitri?maViTri=${maViTri}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        tokenCybersoft: tokenCybersoft,
-        token: token,
-      }        
-    });
+    const res = await axiosInstance.post(
+      `/vi-tri/upload-hinh-vitri?maViTri=${maViTri}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          tokenCybersoft: tokenCybersoft,
+          token: token,
+        },
+      }
+    );
 
     return res.data.content;
   } catch (error) {
@@ -39,7 +46,6 @@ export async function uploadLocationImage(maViTri, file) {
   }
 }
 
-
 // Thêm vị trí mới
 export const addLocation = createAsyncThunk(
   "location/addLocation",
@@ -47,7 +53,7 @@ export const addLocation = createAsyncThunk(
     try {
       console.log("=== Adding Location ===", location);
       console.log("=== Admin Token ===", localStorage.getItem("accessToken"));
-      
+
       // 1. Tạo vị trí mới
       const res = await axiosInstance.post("/vi-tri", location);
       const newLocation = res.data.content;
@@ -60,7 +66,9 @@ export const addLocation = createAsyncThunk(
       // Trả về vị trí mới
       return newLocation;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Thêm vị trí thất bại");
+      return rejectWithValue(
+        err.response?.data?.message || "Thêm vị trí thất bại"
+      );
     }
   }
 );
