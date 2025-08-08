@@ -1,0 +1,282 @@
+/* Comment Manager Dark Theme Styles - High Specificity */
+
+/* Search Input Dark Theme - Force Ove.custom-select .ant-select-selection-placeholder {
+  color: #9ca3af !important;
+}
+
+.custom-select .ant-select-arrow {
+  color: white !important;
+}
+
+.custom-select .ant-select-selection-item {
+  color: white !important;
+}
+
+.custom-select .ant-select-clear {
+  background: transparent !important;
+  color: #9ca3af !important;
+}
+
+.custom-select .ant-select-clear:hover {
+  color: white !important;
+}
+
+/* Additional overrides with higher specificity */
+body .custom-select .ant-select-selection-placeholder,
+html body .custom-select .ant-select-selection-placeholder {
+  color: #9ca3af !important;
+}
+
+body .custom-select .ant-select-arrow,
+html body .custom-select .ant-select-arrow {
+  color: white !important;
+}
+
+body .custom-select .ant-select-selection-item,
+html body .custom-select .ant-select-selection-item {
+  color: white !important;
+}om-search .ant-input-affix-wrapper,
+body .custom-search .ant-input-affix-wrapper-focused,
+body .custom-search .ant-input-affix-wrapper:focus,
+body .custom-search .ant-input-affix-wrapper:hover,
+body
+  .custom-search
+  .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+  background: #374151 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+body .custom-search .ant-input-affix-wrapper:focus,
+body .custom-search .ant-input-affix-wrapper-focused {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+  background: #374151 !important;
+}
+
+body .custom-search .ant-input {
+  background: #374151 !important;
+  color: white !important;
+  border: none !important;
+}
+
+body .custom-search .ant-input:focus {
+  background: #374151 !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body .custom-search .ant-input::placeholder {
+  color: #9ca3af !important;
+}
+
+body .custom-search .ant-input-clear-icon {
+  color: #9ca3af !important;
+}
+
+body .custom-search .ant-input-clear-icon:hover {
+  color: white !important;
+}
+
+body .custom-search .ant-input-search-button {
+  background: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+}
+
+body .custom-search .ant-input-search-button:hover {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+/* Extremely specific override for stubborn search input */
+html body div .custom-search .ant-input-affix-wrapper .ant-input {
+  background: #374151 !important;
+  color: white !important;
+}
+
+html body div .custom-search .ant-input-affix-wrapper {
+  background: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+/* Select Dark Theme - Ultimate Override */
+.custom-select .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.custom-select .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+body .custom-select .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+body .custom-select .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+html body .custom-select .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+html body .custom-select .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  background: #374151 !important;
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+.custom-select .ant-select:hover .ant-select-selector,
+.custom-select .ant-select-single:hover .ant-select-selector,
+body .custom-select .ant-select:hover .ant-select-selector,
+body .custom-select .ant-select-single:hover .ant-select-selector {
+  border-color: #3b82f6 !important;
+  background: #374151 !important;
+  background-color: #374151 !important;
+}
+
+.custom-select .ant-select-focused .ant-select-selector,
+.custom-select .ant-select-single.ant-select-focused .ant-select-selector,
+body .custom-select .ant-select-focused .ant-select-selector,
+body .custom-select .ant-select-single.ant-select-focused .ant-select-selector {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+  background: #374151 !important;
+  background-color: #374151 !important;
+}
+
+body .custom-select .ant-select-selection-placeholder {
+  color: #9ca3af !important;
+}
+
+body .custom-select .ant-select-arrow {
+  color: white !important;
+}
+
+body .custom-select .ant-select-selection-item {
+  color: white !important;
+}
+
+body .custom-select .ant-select-clear {
+  background: transparent !important;
+  color: #9ca3af !important;
+}
+
+body .custom-select .ant-select-clear:hover {
+  color: white !important;
+}
+
+/* Dropdown Dark Theme - Force Override */
+body .ant-select-dropdown.custom-dropdown {
+  background: #374151 !important;
+  border: 1px solid #4b5563 !important;
+}
+
+body .ant-select-dropdown.custom-dropdown .ant-select-item {
+  color: white !important;
+  background: transparent !important;
+}
+
+body .ant-select-dropdown.custom-dropdown .ant-select-item-option-selected {
+  background: #3b82f6 !important;
+  color: white !important;
+}
+
+body .ant-select-dropdown.custom-dropdown .ant-select-item-option-active {
+  background: #4b5563 !important;
+  color: white !important;
+}
+
+body .ant-select-dropdown.custom-dropdown .ant-select-item:hover {
+  background: #4b5563 !important;
+}
+
+body .ant-select-dropdown.custom-dropdown .ant-select-item-empty {
+  color: #9ca3af !important;
+}
+
+/* Table Dark Theme - Force Override */
+body .custom-table .ant-table {
+  background: #1f2937 !important;
+  color: white !important;
+}
+
+body .custom-table .ant-table-thead > tr > th {
+  background: #374151 !important;
+  color: white !important;
+  border-bottom: 1px solid #4b5563 !important;
+}
+
+body .custom-table .ant-table-tbody > tr > td {
+  background: #1f2937 !important;
+  color: white !important;
+  border-bottom: 1px solid #374151 !important;
+}
+
+body .custom-table .ant-table-tbody > tr:hover > td {
+  background: #374151 !important;
+}
+
+/* Pagination Dark Theme - Force Override */
+body .custom-table .ant-pagination {
+  color: white !important;
+}
+
+body .custom-table .ant-pagination .ant-pagination-item {
+  background: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+body .custom-table .ant-pagination .ant-pagination-item a {
+  color: white !important;
+}
+
+body .custom-table .ant-pagination .ant-pagination-item-active {
+  background: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+}
+
+body .custom-table .ant-pagination .ant-pagination-item-active a {
+  color: white !important;
+}
+
+body .custom-table .ant-pagination .ant-pagination-prev,
+body .custom-table .ant-pagination .ant-pagination-next {
+  color: white !important;
+}
+
+body
+  .custom-table
+  .ant-pagination
+  .ant-pagination-prev
+  .ant-pagination-item-link,
+body
+  .custom-table
+  .ant-pagination
+  .ant-pagination-next
+  .ant-pagination-item-link {
+  background: #374151 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+body .custom-table .ant-pagination .ant-pagination-options {
+  color: white !important;
+}
+
+body .custom-table .ant-pagination .ant-pagination-total-text {
+  color: white !important;
+}
+
+/* Nuclear Option - Force Dark Theme Globally for this component */
+div[class*="custom-select"] .ant-select .ant-select-selector,
+div[class*="custom-select"] .ant-select-single .ant-select-selector,
+[class*="custom-select"] .ant-select .ant-select-selector,
+[class*="custom-select"] .ant-select-single .ant-select-selector {
+  background: #374151 !important;
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+div[class*="custom-select"] .ant-select-selection-item,
+[class*="custom-select"] .ant-select-selection-item {
+  color: white !important;
+}
+
+div[class*="custom-select"] .ant-select-selection-placeholder,
+[class*="custom-select"] .ant-select-selection-placeholder {
+  color: #9ca3af !important;
+}
+
+div[class*="custom-select"] .ant-select-arrow,
+[class*="custom-select"] .ant-select-arrow {
+  color: white !important;
+}

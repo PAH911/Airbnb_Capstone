@@ -17,6 +17,7 @@ import AuthPage from "@/pages/client-admin/AuthPage/AuthPage";
 import UserListPage from "@/pages/client-admin/UserManager/UserManager";
 import LocationManager from "@/pages/client-admin/LocationManager/LocationManager";
 import RoomManager from "@/pages/client-admin/RoomManager/RoomManager";
+import CommentManager from "@/pages/client-admin/CommentManager/CommentManager";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -45,6 +46,8 @@ export default function AppRoutes() {
           <Route path="location" element={<LocationManager />} />{" "}
           {/* Thêm dòng này */}
           <Route path="rooms" element={<RoomManager />} /> {/* Thêm dòng này */}
+          <Route path="comments" element={<CommentManager />} />{" "}
+          {/* Thêm dòng này */}
         </Route>
       </Route>
 

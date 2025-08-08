@@ -5,6 +5,7 @@ import {
   SettingOutlined,
   LogoutOutlined,
   UserOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -52,7 +53,7 @@ export default function AdminSidebar({ collapsed, setCollapsed }) {
     {
       key: "sub4",
       label: "Quản lý bình luận",
-      icon: <SettingOutlined />,
+      icon: <MessageOutlined />,
       children: [{ key: "/admin/comments", label: "Danh sách bình luận" }],
     },
     {

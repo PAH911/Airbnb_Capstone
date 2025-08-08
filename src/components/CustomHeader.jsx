@@ -52,6 +52,8 @@ export default function CustomHeader({ collapsed, setCollapsed }) {
         dashboard: "Trang chủ",
         users: "Quản lý người dùng",
         location: "Quản lý vị trí",
+        rooms: "Quản lý phòng",
+        comments: "Quản lý bình luận",
       };
       breadcrumbs.push({
         title: (
