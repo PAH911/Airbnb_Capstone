@@ -73,6 +73,51 @@ export const addLocation = createAsyncThunk(
   }
 );
 
+// Cập nhật vị trí
+export const updateLocation = createAsyncThunk(
+  "location/updateLocation",
+  async ({ id, location, imageFile }, { rejectWithValue }) => {
+    try {
+      console.log("=== Updating Location ===", { id, location });
+
+      // 1. Cập nhật thông tin vị trí
+      const res = await axiosInstance.put(`/vi-tri/${id}`, location);
+      const updatedLocation = res.data.content;
+
+      // 2. Nếu có ảnh mới, upload ảnh
+      if (imageFile) {
+        await uploadLocationImage(id, imageFile);
+      }
+
+      // Trả về vị trí đã cập nhật
+      return updatedLocation;
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || "Cập nhật vị trí thất bại"
+      );
+    }
+  }
+);
+
+// Xóa vị trí
+export const deleteLocation = createAsyncThunk(
+  "location/deleteLocation",
+  async (id, { rejectWithValue }) => {
+    try {
+      console.log("=== Deleting Location ===", id);
+
+      await axiosInstance.delete(`/vi-tri/${id}`);
+
+      // Trả về id để remove khỏi state
+      return id;
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || "Xóa vị trí thất bại"
+      );
+    }
+  }
+);
+
 const locationSlice = createSlice({
   name: "location",
   initialState: {
@@ -81,6 +126,10 @@ const locationSlice = createSlice({
     error: null,
     addLoading: false,
     addError: null,
+    updateLoading: false,
+    updateError: null,
+    deleteLoading: false,
+    deleteError: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -110,6 +159,39 @@ const locationSlice = createSlice({
       .addCase(addLocation.rejected, (state, action) => {
         state.addLoading = false;
         state.addError = action.payload;
+      })
+      // update
+      .addCase(updateLocation.pending, (state) => {
+        state.updateLoading = true;
+        state.updateError = null;
+      })
+      .addCase(updateLocation.fulfilled, (state, action) => {
+        state.updateLoading = false;
+        const index = state.locations.findIndex(
+          (loc) => loc.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.locations[index] = action.payload;
+        }
+      })
+      .addCase(updateLocation.rejected, (state, action) => {
+        state.updateLoading = false;
+        state.updateError = action.payload;
+      })
+      // delete
+      .addCase(deleteLocation.pending, (state) => {
+        state.deleteLoading = true;
+        state.deleteError = null;
+      })
+      .addCase(deleteLocation.fulfilled, (state, action) => {
+        state.deleteLoading = false;
+        state.locations = state.locations.filter(
+          (loc) => loc.id !== action.payload
+        );
+      })
+      .addCase(deleteLocation.rejected, (state, action) => {
+        state.deleteLoading = false;
+        state.deleteError = action.payload;
       });
   },
 });

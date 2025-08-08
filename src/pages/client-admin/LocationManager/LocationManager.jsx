@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLocations } from "./locationSlice";
-import { Table, Tag, Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { fetchLocations, deleteLocation } from "./locationSlice";
+import { Table, Tag, Button, Popconfirm } from "antd";
+import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import LocationAddModal from "./LocationAddModal";
+import LocationEditModal from "./LocationEditModal";
 import { toast } from "react-toastify";
 
 export default function LocationManager() {
   const dispatch = useDispatch();
-  const { locations, loading, error, addLoading, addError } = useSelector(
-    (state) => state.location
-  );
-  const [openModal, setOpenModal] = useState(false);
+  const {
+    locations,
+    loading,
+    error,
+    addLoading,
+    addError,
+    updateLoading,
+    deleteLoading,
+  } = useSelector((state) => state.location);
+
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [editingLocation, setEditingLocation] = useState(null);
 
   useEffect(() => {
     // Debug: kiểm tra token và user info
@@ -68,13 +78,38 @@ export default function LocationManager() {
   }, [dispatch]);
 
   const handleAddSuccess = () => {
-    setOpenModal(false);
+    setOpenAddModal(false);
     dispatch(fetchLocations());
     toast.success("Thêm vị trí thành công!");
   };
 
   const handleAddFailed = (msg) => {
     toast.error(`Thêm vị trí thất bại: ${msg || "Lỗi không xác định"}`);
+  };
+
+  const handleEdit = (location) => {
+    setEditingLocation(location);
+    setOpenEditModal(true);
+  };
+
+  const handleEditSuccess = () => {
+    setOpenEditModal(false);
+    setEditingLocation(null);
+    dispatch(fetchLocations());
+    toast.success("Cập nhật vị trí thành công!");
+  };
+
+  const handleEditFailed = (msg) => {
+    toast.error(`Cập nhật thất bại: ${msg || "Lỗi không xác định"}`);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteLocation(id)).unwrap();
+      toast.success("Xóa vị trí thành công!");
+    } catch (error) {
+      toast.error(error || "Xóa thất bại");
+    }
   };
 
   const columns = [
@@ -98,6 +133,36 @@ export default function LocationManager() {
             NULL
           </div>
         ),
+    },
+    {
+      title: "Hành động",
+      key: "actions",
+      align: "center",
+      render: (_, record) => (
+        <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+          <Button
+            type="text"
+            icon={<EditOutlined style={{ color: "#ffb92c", fontSize: 18 }} />}
+            onClick={() => handleEdit(record)}
+            title="Cập nhật"
+          />
+          <Popconfirm
+            title="Bạn có chắc muốn xóa vị trí này?"
+            onConfirm={() => handleDelete(record.id)}
+            okText="Xóa"
+            cancelText="Hủy"
+            okButtonProps={{ loading: deleteLoading }}
+          >
+            <Button
+              type="text"
+              icon={
+                <DeleteOutlined style={{ color: "#ff4949", fontSize: 18 }} />
+              }
+              title="Xóa"
+            />
+          </Popconfirm>
+        </div>
+      ),
     },
   ];
 
@@ -130,7 +195,7 @@ export default function LocationManager() {
             color: "#222",
             fontWeight: 600,
           }}
-          onClick={() => setOpenModal(true)}
+          onClick={() => setOpenAddModal(true)}
           loading={addLoading}
         >
           Thêm vị trí mới
@@ -160,10 +225,18 @@ export default function LocationManager() {
       />
 
       <LocationAddModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
+        open={openAddModal}
+        onClose={() => setOpenAddModal(false)}
         onSuccess={handleAddSuccess}
         onFailed={handleAddFailed}
+      />
+
+      <LocationEditModal
+        open={openEditModal}
+        onClose={() => setOpenEditModal(false)}
+        onSuccess={handleEditSuccess}
+        onFailed={handleEditFailed}
+        location={editingLocation}
       />
     </div>
   );
