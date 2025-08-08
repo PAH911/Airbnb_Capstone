@@ -16,7 +16,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../pages/client-customer/LoginPage/authSlice";
 import { setUser } from "../pages/client-customer/ProfilePage/userSlice";
 
-// Sửa lại các tab menu cho phù hợp với trang đặt phòng online
 const menuItems = [
   { key: "home", label: <Link to="/">Trang chủ</Link> },
   { key: "rooms", label: <Link to="/rooms">Phòng</Link> },

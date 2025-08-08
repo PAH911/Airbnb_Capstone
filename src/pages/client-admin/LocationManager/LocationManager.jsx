@@ -8,7 +8,9 @@ import { toast } from "react-toastify";
 
 export default function LocationManager() {
   const dispatch = useDispatch();
-  const { locations, loading, error, addLoading, addError } = useSelector((state) => state.location);
+  const { locations, loading, error, addLoading, addError } = useSelector(
+    (state) => state.location
+  );
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
@@ -36,7 +38,11 @@ export default function LocationManager() {
       key: "hinhAnh",
       render: (img) =>
         img ? (
-          <img src={img} alt="Ảnh vị trí" className="w-16 h-12 rounded-md object-cover" />
+          <img
+            src={img}
+            alt="Ảnh vị trí"
+            className="w-16 h-12 rounded-md object-cover"
+          />
         ) : (
           <div className="w-16 h-12 rounded-md bg-gray-600 flex items-center justify-center text-yellow-400 font-bold">
             NULL
@@ -55,7 +61,14 @@ export default function LocationManager() {
           marginBottom: 24,
         }}
       >
-        <h2 style={{ fontSize: 24, fontWeight: "bold", color: "#ffb92c", margin: 0 }}>
+        <h2
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            color: "#ffb92c",
+            margin: 0,
+          }}
+        >
           Danh sách vị trí
         </h2>
         <Button
@@ -81,7 +94,14 @@ export default function LocationManager() {
         dataSource={locations}
         rowKey="id"
         loading={loading}
-        pagination={{ pageSize: 8, showSizeChanger: true, pageSizeOptions: [8, 16, 32] }}
+        pagination={{
+          pageSize: 8,
+          showSizeChanger: true,
+          pageSizeOptions: ["8", "16", "32", "50"],
+          showQuickJumper: true,
+          showTotal: (total, range) =>
+            `${range[0]}-${range[1]} của ${total} địa điểm`,
+        }}
         bordered
         size="middle"
         scroll={{ x: "max-content" }}

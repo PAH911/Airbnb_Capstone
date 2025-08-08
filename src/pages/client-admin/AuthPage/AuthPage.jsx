@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAdmin } from "./authSlice"; // đổi path đúng nếu khác
+import { loginAdmin, clearError } from "./authSlice"; // đổi path đúng nếu khác
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
@@ -14,46 +14,85 @@ export default function AuthPage() {
   const adminlogin = useSelector((state) => state.adminlogin) || {
     user: null,
     loading: false,
+    error: null,
   };
-  const { user, loading } = adminlogin;
+  const { user, loading, error } = adminlogin;
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [focus, setFocus] = useState({ email: false, password: false });
 
-  // Theo dõi user thay đổi để chuyển trang khi đúng quyền
+  // Theo dõi user và error thay đổi
   useEffect(() => {
-    // Nếu user đúng quyền admin → chuyển trang
-    if (user && user.role && user.role.toLowerCase() === "admin") {
-      toast.success("Đăng nhập thành công!");
-      navigate("/admin", { replace: true });
-    }
-  }, [user, navigate]);
+    console.log("🔄 UseEffect triggered");
+    console.log("📊 Current user:", user);
+    console.log("❌ Current error:", error);
 
-  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    // Hiển thị lỗi nếu có
+    if (error) {
+      toast.error(error);
+      return;
+    }
+
+    if (user) {
+      const userRole = user.role || user.Role || user.ROLE;
+      console.log("👤 User role:", userRole);
+
+      // Kiểm tra quyền admin (case-insensitive)
+      if (userRole && userRole.toLowerCase() === "admin") {
+        console.log("✅ Admin role confirmed!");
+        console.log("🚀 Navigating to /admin...");
+
+        toast.success(`Chào mừng ${user.name || "Admin"}!`);
+
+        // Sử dụng setTimeout để đảm bảo navigation hoạt động
+        setTimeout(() => {
+          navigate("/admin", { replace: true });
+        }, 100);
+      } else {
+        console.log("❌ Not admin role:", userRole);
+        toast.error("Bạn không có quyền truy cập admin!");
+      }
+    } else {
+      console.log("👤 No user data yet");
+    }
+  }, [user, error, navigate]);
+
+  const onChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    // Clear error khi user bắt đầu nhập lại
+    if (error) {
+      dispatch(clearError());
+    }
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    // Clear localStorage trước khi đăng nhập
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    const res = await dispatch(loginAdmin(form));
-    console.log("=== login result ===", res);
+    localStorage.removeItem("accessToken");
 
-    // Lấy user đúng chuẩn từ payload
-    const userRes = res.payload?.content?.user || res.payload?.user;
-    // Nếu sai tài khoản/mật khẩu (userRes undefined)
-    if (res.meta.requestStatus !== "fulfilled" || !userRes) {
-      toast.error("Sai tài khoản hoặc mật khẩu!");
-      return;
+    console.log("=== Starting login with ===", form);
+
+    try {
+      const res = await dispatch(loginAdmin(form));
+      console.log("=== Full login result ===", res);
+
+      // Kiểm tra kết quả đăng nhập
+      if (res.meta.requestStatus === "fulfilled") {
+        console.log(
+          "✅ Login API successful, waiting for Redux and useEffect..."
+        );
+        // Redux slice sẽ xử lý user data và useEffect sẽ navigate
+      } else {
+        // Lỗi sẽ được xử lý bởi useEffect khi error state thay đổi
+        console.log("❌ Login failed, error will be handled by useEffect");
+      }
+    } catch (error) {
+      console.error("=== Login error ===", error);
+      toast.error("Có lỗi xảy ra trong quá trình đăng nhập!");
     }
-    // Nếu đúng tài khoản nhưng sai quyền
-    if (userRes.role?.toLowerCase() !== "admin") {
-      toast.error("Bạn không đủ quyền truy cập admin!");
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      return;
-    }
-    // Nếu đúng quyền thì không cần navigate ở đây nữa (đã có useEffect handle)
-    // toast.success("Đăng nhập thành công!"); // toast sẽ hiện ở useEffect
   };
 
   return (
@@ -78,6 +117,7 @@ export default function AuthPage() {
         <p className="text-center text-[#a2adc7] mb-8">
           Chào mừng trở lại! Vui lòng nhập tài khoản admin để tiếp tục.
         </p>
+
         <form onSubmit={onSubmit} autoComplete="off">
           <div className="mb-5 relative">
             <FiUser

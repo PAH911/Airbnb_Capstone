@@ -17,7 +17,12 @@ function formatDate(dateStr) {
 
 export default function UserManager() {
   const dispatch = useDispatch();
-  const { users, loading, error, deleteLoading } = useSelector((state) => state.userList);
+  const {
+    users = [],
+    loading,
+    error,
+    deleteLoading,
+  } = useSelector((state) => state.userList);
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -29,13 +34,15 @@ export default function UserManager() {
   }, [dispatch]);
 
   // Lọc danh sách user theo searchText (tên hoặc email)
-  const filteredUsers = users.filter((user) => {
-    const search = searchText.trim().toLowerCase();
-    return (
-      user.name.toLowerCase().includes(search) ||
-      user.email.toLowerCase().includes(search)
-    );
-  });
+  const filteredUsers =
+    users?.filter((user) => {
+      if (!searchText.trim()) return true;
+      const search = searchText.trim().toLowerCase();
+      return (
+        user?.name?.toLowerCase().includes(search) ||
+        user?.email?.toLowerCase().includes(search)
+      );
+    }) || [];
 
   const handleAddSuccess = () => {
     setOpenAddModal(false);
@@ -81,7 +88,8 @@ export default function UserManager() {
       title: "Giới tính",
       dataIndex: "gender",
       key: "gender",
-      render: (gender) => (gender === true ? "Nam" : gender === false ? "Nữ" : "--"),
+      render: (gender) =>
+        gender === true ? "Nam" : gender === false ? "Nữ" : "--",
     },
     {
       title: "Role",
@@ -95,7 +103,12 @@ export default function UserManager() {
         return (
           <Tag
             color={colors[role] || "gray"}
-            style={{ fontWeight: 600, color: "#fff", borderRadius: 4, padding: "0 8px" }}
+            style={{
+              fontWeight: 600,
+              color: "#fff",
+              borderRadius: 4,
+              padding: "0 8px",
+            }}
           >
             {role}
           </Tag>
@@ -123,7 +136,9 @@ export default function UserManager() {
           >
             <Button
               type="text"
-              icon={<DeleteOutlined style={{ color: "#ff4949", fontSize: 18 }} />}
+              icon={
+                <DeleteOutlined style={{ color: "#ff4949", fontSize: 18 }} />
+              }
               title="Xoá"
             />
           </Popconfirm>
@@ -142,7 +157,14 @@ export default function UserManager() {
           marginBottom: 16,
         }}
       >
-        <h2 style={{ fontSize: 24, fontWeight: "bold", color: "#ffb92c", margin: 0 }}>
+        <h2
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            color: "#ffb92c",
+            margin: 0,
+          }}
+        >
           Danh sách người dùng
         </h2>
         <Button
@@ -168,13 +190,19 @@ export default function UserManager() {
         style={{ marginBottom: 16, maxWidth: 360 }}
       />
 
-
       <Table
         columns={columns}
         dataSource={filteredUsers}
         rowKey="id"
         loading={loading}
-        pagination={{ pageSize: 8, showSizeChanger: true, pageSizeOptions: [8, 16, 32] }}
+        pagination={{
+          pageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["8", "16", "32", "50"],
+          showQuickJumper: true,
+          showTotal: (total, range) =>
+            `${range[0]}-${range[1]} của ${total} người dùng`,
+        }}
         bordered
         size="middle"
         scroll={{ x: "max-content" }}

@@ -13,7 +13,7 @@ import adminUserReducer from "../pages/client-admin/UserManager/adminUserSlice";
 import adminRoomReducer from "../pages/client-admin/RoomManager/adminRoomSlice";
 import adminBookingReducer from "../pages/client-admin/BookingManager/adminBookingSlice";
 import adminCommentReducer from "../pages/client-admin/CommentManager/adminCommentSlice";
-import userListReducer from "../pages/client-admin/UserManager/adminUserSlice";
+import adminLoginReducer from "../pages/client-admin/AuthPage/authSlice";
 
 // Persist config
 const persistConfig = {
@@ -24,13 +24,14 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  adminlogin: adminLoginReducer, // Thêm reducer cho admin login
   user: userReducer,
   booking: bookingReducer,
   comment: commentReducer,
   roomList: roomListReducer,
   roomDetail: roomDetailReducer,
 
-  adminUser: adminUserReducer,
+  userList: adminUserReducer, // Đổi tên từ adminUser thành userList để khớp với component
   adminRoom: adminRoomReducer,
   adminBooking: adminBookingReducer,
   adminComment: adminCommentReducer,

@@ -2,6 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom scrollbar styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-w/* Style cho dropdown chọn số item per page */
+.ant-pagination .ant-pagination-options .ant-select-arrow {
+  color: #ffffff !important; /* Mũi tên dropdown trắng */
+}
+
+.ant-pagination .ant-pagination-options .ant-select-selector:hover {
+  border-color: #6b7280 !important; /* Border hover cho select */
+  background-color: #4b5563 !important; /* Nền hover cho select */
+}
+
+/* Style cho dropdown options */
+.ant-select-dropdown {
+  background-color: #374151 !important; /* Nền tối cho dropdown */
+  border: 1px solid #4b5563 !important; /* Border tối */
+}
+
+.ant-select-dropdown .ant-select-item {
+  background-color: #374151 !important; /* Nền tối cho item */
+  color: #ffffff !important; /* Chữ trắng cho item */
+}
+
+.ant-select-dropdown .ant-select-item:hover {
+  background-color: #4b5563 !important; /* Nền hover cho item */
+  color: #ffffff !important; /* Chữ trắng hover */
+}
+
+.ant-select-dropdown .ant-select-item-option-selected {
+  background-color: #ef4444 !important; /* Nền đỏ cho item selected */
+  color: #ffffff !important; /* Chữ trắng cho selected */
+}
+
+.ant-select-dropdown .ant-select-item-option-active {
+  background-color: #4b5563 !important; /* Nền active */
+  color: #ffffff !important; /* Chữ trắng active */
+}
+ollbar {
+  display: none;
+}
+
+/* Custom scrollbar for other elements */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Dark mode scrollbar */
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
 /* ĐỔI MÀU ACTIVE MENU ANT DESIGN (DARK) */
 .ant-menu-dark .ant-menu-item-selected,
 .ant-menu-dark .ant-menu-submenu-selected {
@@ -31,4 +109,129 @@
 }
 .custom-ant-table .ant-table-row-selected > td {
   background: #31394e !important;
+}
+
+/* Custom Antd Pagination Dark Theme */
+.ant-pagination .ant-pagination-item {
+  background-color: #374151 !important; /* Nền tối */
+  border-color: #4b5563 !important; /* Border tối */
+}
+
+.ant-pagination .ant-pagination-item a {
+  color: #ffffff !important; /* Chữ trắng */
+}
+
+.ant-pagination .ant-pagination-item:hover {
+  border-color: #6b7280 !important; /* Border hover */
+  background-color: #4b5563 !important; /* Nền hover */
+}
+
+.ant-pagination .ant-pagination-item:hover a {
+  color: #ffffff !important; /* Chữ trắng khi hover */
+}
+
+.ant-pagination .ant-pagination-item-active {
+  background-color: #ef4444 !important; /* Nền đỏ cho active */
+  border-color: #ef4444 !important; /* Border đỏ cho active */
+}
+
+.ant-pagination .ant-pagination-item-active a {
+  color: #ffffff !important; /* Chữ trắng cho active */
+}
+
+.ant-pagination .ant-pagination-prev,
+.ant-pagination .ant-pagination-next {
+  background-color: #374151 !important; /* Nền tối cho prev/next */
+  border-color: #4b5563 !important; /* Border tối cho prev/next */
+}
+
+.ant-pagination .ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination .ant-pagination-next .ant-pagination-item-link {
+  background-color: #374151 !important; /* Nền tối cho mũi tên */
+  border-color: #4b5563 !important; /* Border tối cho mũi tên */
+  color: #ffffff !important; /* Màu mũi tên trắng */
+}
+
+.ant-pagination .ant-pagination-prev a,
+.ant-pagination .ant-pagination-next a {
+  color: #ffffff !important; /* Chữ trắng cho prev/next */
+}
+
+.ant-pagination .ant-pagination-prev:hover,
+.ant-pagination .ant-pagination-next:hover {
+  border-color: #6b7280 !important; /* Border hover cho prev/next */
+  background-color: #4b5563 !important; /* Nền hover cho prev/next */
+}
+
+.ant-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-pagination .ant-pagination-next:hover .ant-pagination-item-link {
+  background-color: #4b5563 !important; /* Nền hover cho mũi tên */
+  border-color: #6b7280 !important; /* Border hover cho mũi tên */
+  color: #ffffff !important; /* Màu mũi tên trắng khi hover */
+}
+
+.ant-pagination .ant-pagination-prev:hover a,
+.ant-pagination .ant-pagination-next:hover a {
+  color: #ffffff !important; /* Chữ trắng hover cho prev/next */
+}
+
+.ant-pagination .ant-pagination-disabled,
+.ant-pagination .ant-pagination-disabled:hover {
+  background-color: #1f2937 !important; /* Nền tối cho disabled */
+  border-color: #374151 !important; /* Border tối cho disabled */
+}
+
+.ant-pagination .ant-pagination-disabled .ant-pagination-item-link,
+.ant-pagination .ant-pagination-disabled:hover .ant-pagination-item-link {
+  background-color: #1f2937 !important; /* Nền tối cho mũi tên disabled */
+  border-color: #374151 !important; /* Border tối cho mũi tên disabled */
+  color: #6b7280 !important; /* Màu mũi tên xám cho disabled */
+}
+
+.ant-pagination .ant-pagination-disabled a,
+.ant-pagination .ant-pagination-disabled:hover a {
+  color: #6b7280 !important; /* Chữ xám cho disabled */
+}
+
+.ant-pagination .ant-pagination-options .ant-select-selector {
+  background-color: #374151 !important; /* Nền tối cho select */
+  border-color: #4b5563 !important; /* Border tối cho select */
+  color: #ffffff !important; /* Chữ trắng cho select */
+}
+
+/* Style cho các nút jump (<<, >>) */
+.ant-pagination .ant-pagination-jump-prev,
+.ant-pagination .ant-pagination-jump-next {
+  background-color: #374151 !important; /* Nền tối */
+  border-color: #4b5563 !important; /* Border tối */
+}
+
+.ant-pagination .ant-pagination-jump-prev .ant-pagination-item-link,
+.ant-pagination .ant-pagination-jump-next .ant-pagination-item-link {
+  background-color: #374151 !important; /* Nền tối cho ellipsis */
+  border-color: #4b5563 !important; /* Border tối cho ellipsis */
+  color: #ffffff !important; /* Màu trắng cho ellipsis */
+}
+
+.ant-pagination .ant-pagination-jump-prev:hover,
+.ant-pagination .ant-pagination-jump-next:hover {
+  background-color: #4b5563 !important; /* Nền hover */
+  border-color: #6b7280 !important; /* Border hover */
+}
+
+.ant-pagination .ant-pagination-jump-prev:hover .ant-pagination-item-link,
+.ant-pagination .ant-pagination-jump-next:hover .ant-pagination-item-link {
+  background-color: #4b5563 !important; /* Nền hover cho ellipsis */
+  border-color: #6b7280 !important; /* Border hover cho ellipsis */
+  color: #ffffff !important; /* Màu trắng hover cho ellipsis */
+}
+
+/* Style cho dropdown select trong pagination */
+.ant-pagination .ant-pagination-options .ant-select-arrow {
+  color: #ffffff !important; /* Mũi tên dropdown trắng */
+}
+
+.ant-pagination .ant-pagination-options .ant-select-selector:hover {
+  border-color: #6b7280 !important; /* Border hover cho select */
+  background-color: #4b5563 !important; /* Nền hover cho select */
 }
