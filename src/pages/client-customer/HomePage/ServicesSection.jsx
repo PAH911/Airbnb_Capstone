@@ -2,34 +2,34 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Typography } from "antd";
 import {
-  CloudOutlined,
-  RocketOutlined,
-  CalendarOutlined,
-  SettingOutlined,
+  HomeOutlined,
+  SafetyOutlined,
+  CustomerServiceOutlined,
+  StarOutlined,
 } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
 const services = [
   {
-    icon: <CloudOutlined className="text-3xl text-rose-500" />,
-    title: "Dự báo thời tiết",
-    desc: "Cập nhật thời tiết chính xác cho chuyến đi của bạn.",
+    icon: <HomeOutlined className="text-3xl text-rose-500" />,
+    title: "Phòng chất lượng cao",
+    desc: "Tất cả phòng đều được kiểm duyệt và đảm bảo tiêu chuẩn chất lượng.",
   },
   {
-    icon: <RocketOutlined className="text-3xl text-rose-500" />,
-    title: "Chuyến bay tốt nhất",
-    desc: "Tìm kiếm và đặt vé máy bay giá tốt nhất.",
+    icon: <SafetyOutlined className="text-3xl text-rose-500" />,
+    title: "Đặt phòng an toàn",
+    desc: "Thanh toán bảo mật và chính sách hoàn tiền linh hoạt.",
   },
   {
-    icon: <CalendarOutlined className="text-3xl text-rose-500" />,
-    title: "Sự kiện địa phương",
-    desc: "Khám phá các sự kiện nổi bật tại điểm đến.",
+    icon: <CustomerServiceOutlined className="text-3xl text-rose-500" />,
+    title: "Hỗ trợ 24/7",
+    desc: "Đội ngũ chăm sóc khách hàng luôn sẵn sàng hỗ trợ bạn.",
   },
   {
-    icon: <SettingOutlined className="text-3xl text-rose-500" />,
-    title: "Tùy chỉnh",
-    desc: "Dịch vụ cá nhân hóa cho từng khách hàng.",
+    icon: <StarOutlined className="text-3xl text-rose-500" />,
+    title: "Trải nghiệm tuyệt vời",
+    desc: "Hàng nghìn đánh giá 5 sao từ khách hàng hài lòng.",
   },
 ];
 
@@ -38,10 +38,10 @@ export default function ServicesSection() {
     <section className="py-16 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       <div className="max-w-6xl mx-auto px-4">
         <Text className="uppercase text-rose-500 font-bold tracking-widest block text-center mb-2">
-          Danh mục
+          Tại sao chọn chúng tôi
         </Text>
         <Title className="text-center !mb-12 !text-4xl !font-bold !text-gray-900 dark:!text-white">
-          Chúng tôi cung cấp dịch vụ tốt nhất
+          Dịch vụ cho thuê phòng hàng đầu
         </Title>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((s, i) => (

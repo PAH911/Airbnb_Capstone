@@ -14,6 +14,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { useDispatch } from "react-redux";
 import { login as loginThunk } from "./authSlice";
+import { setSearchCriteria } from "../../../store/searchSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
@@ -108,7 +109,40 @@ export default function LoginPage() {
             replace: true,
           });
         } else {
-          navigate("/", { replace: true });
+          // Kiểm tra nếu có room được lưu để redirect
+          const redirectToRoom = localStorage.getItem("redirectToRoom");
+          const redirectToLocation = localStorage.getItem("redirectToLocation");
+
+          if (redirectToRoom) {
+            localStorage.removeItem("redirectToRoom"); // Clear after use
+            navigate(`/room/${redirectToRoom}`, { replace: true });
+            // Scroll to top after navigation
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }, 100);
+          } else if (redirectToLocation) {
+            const locationData = JSON.parse(redirectToLocation);
+            localStorage.removeItem("redirectToLocation"); // Clear after use
+
+            // Set search criteria for the location
+            dispatch(
+              setSearchCriteria({
+                location: locationData.id,
+                locationName: locationData.name,
+                guests: 1,
+                checkIn: null,
+                checkOut: null,
+              })
+            );
+
+            navigate("/rooms", { replace: true });
+            // Scroll to top after navigation
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }, 100);
+          } else {
+            navigate("/", { replace: true });
+          }
         }
       } else {
         // Xử lý lỗi đăng nhập với thông báo từ API

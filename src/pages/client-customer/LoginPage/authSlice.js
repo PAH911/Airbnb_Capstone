@@ -39,6 +39,8 @@ const authSlice = createSlice({
     logout: (state) => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("userInfo"); // Xóa luôn userInfo
+      localStorage.removeItem("redirectToRoom"); // Xóa room redirect khi logout
+      localStorage.removeItem("redirectToLocation"); // Xóa location redirect khi logout
       state.user = null;
       state.token = null;
     },

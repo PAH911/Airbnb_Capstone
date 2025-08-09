@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Card, Typography, Skeleton } from "antd";
+import { Card, Typography, Skeleton, message } from "antd";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import * as roomService from "../../../services/roomService";
 
 const { Title, Text } = Typography;
@@ -8,6 +10,30 @@ const { Title, Text } = Typography;
 export default function FeaturedRoomsSection() {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+
+  // Handle room click
+  const handleRoomClick = (roomId) => {
+    // Check if user is logged in
+    const token = localStorage.getItem("accessToken");
+    const userInfo = localStorage.getItem("userInfo");
+
+    if (!token || !userInfo || !user) {
+      // Save the room ID to redirect after login
+      localStorage.setItem("redirectToRoom", roomId);
+      message.warning("Vui lòng đăng nhập để xem chi tiết phòng");
+      navigate("/login");
+      return;
+    }
+
+    // Navigate to room detail if logged in and scroll to top
+    navigate(`/room/${roomId}`);
+    // Scroll to top after navigation
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 100);
+  };
 
   useEffect(() => {
     async function fetchRooms() {
@@ -52,11 +78,12 @@ export default function FeaturedRoomsSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="group"
+                className="group cursor-pointer"
+                onClick={() => handleRoomClick(room.id)}
               >
                 <Card
                   hoverable={false}
-                  className="rounded-2xl overflow-hidden shadow-lg border-0 bg-white dark:bg-gray-800 group-hover:shadow-2xl transition-all duration-300"
+                  className="rounded-2xl overflow-hidden shadow-lg border-0 bg-white dark:bg-gray-800 group-hover:shadow-2xl transition-all duration-300 h-full"
                   cover={
                     <div className="overflow-hidden">
                       <img

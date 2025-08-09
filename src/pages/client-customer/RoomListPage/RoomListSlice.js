@@ -18,47 +18,57 @@ export const fetchRoomListData = createAsyncThunk(
       const commentsRes = await commentService.getComments();
       const allComments = commentsRes.data.content || [];
 
-      // Tính toán số sao trung bình cho mỗi phòng dựa trên comments
-      const roomsWithRating = rooms.map((room) => {
-        const roomComments = allComments.filter(
-          (comment) => comment.maPhong === room.id
+      // Tối ưu: Tạo Map để group comments theo room ID một lần
+      const commentsByRoom = new Map();
+      const roomRatingCache = new Map();
+
+      allComments.forEach((comment) => {
+        const roomId = comment.maPhong;
+        if (!commentsByRoom.has(roomId)) {
+          commentsByRoom.set(roomId, []);
+        }
+        commentsByRoom.get(roomId).push(comment);
+      });
+
+      // Tính toán rating một lần cho tất cả phòng có comments
+      commentsByRoom.forEach((comments, roomId) => {
+        const totalRating = comments.reduce((sum, comment) => {
+          return sum + (comment.saoBinhLuan || 5);
+        }, 0);
+        const averageRating = Number(
+          (totalRating / comments.length).toFixed(1)
         );
-        let averageRating = null; // Không có rating mặc định
 
-        if (roomComments.length > 0) {
-          const totalRating = roomComments.reduce((sum, comment) => {
-            return sum + (comment.saoBinhLuan || 5);
-          }, 0);
-          averageRating = Number(
-            (totalRating / roomComments.length).toFixed(1)
-          );
-        }
+        roomRatingCache.set(roomId, {
+          averageRating,
+          totalComments: comments.length,
+        });
+      });
 
-        // Debug log cho phòng đầu tiên
-        if (room === rooms[0]) {
-          console.log("=== Room Rating Calculation ===", {
-            roomId: room.id,
-            roomName: room.tenPhong,
-            commentsCount: roomComments.length,
-            commentsData: roomComments.map((c) => ({
-              id: c.id,
-              rating: c.saoBinhLuan,
-            })),
-            calculatedRating: averageRating,
-          });
-        }
+      // Áp dụng rating đã tính cho các phòng
+      const roomsWithRating = rooms.map((room) => {
+        const ratingData = roomRatingCache.get(room.id);
 
         return {
           ...room,
-          averageRating: averageRating,
-          totalComments: roomComments.length,
+          averageRating: ratingData?.averageRating || null,
+          totalComments: ratingData?.totalComments || 0,
         };
       });
 
-      // Nhóm phòng theo location
+      // Nhóm phòng theo location một cách hiệu quả
       const grouped = {};
+
+      // Khởi tạo object với tất cả location IDs
       locations.forEach((loc) => {
-        grouped[loc.id] = roomsWithRating.filter((r) => r.maViTri === loc.id);
+        grouped[loc.id] = [];
+      });
+
+      // Group rooms một lần duy nhất
+      roomsWithRating.forEach((room) => {
+        if (grouped[room.maViTri]) {
+          grouped[room.maViTri].push(room);
+        }
       });
 
       return { locations, rooms: roomsWithRating, roomsByLocation: grouped };
@@ -86,37 +96,51 @@ const roomListSlice = createSlice({
   },
   reducers: {
     setFilters: (state, action) => {
-      state.filters = action.payload;
-      // Apply filters
-      const filtered = {};
-      Object.keys(state.roomsByLocation).forEach((locationId) => {
-        filtered[locationId] = state.roomsByLocation[locationId].filter(
-          (room) => {
-            // Filter by price
-            const priceMatch =
-              room.giaTien >= action.payload.priceRange[0] &&
-              room.giaTien <= action.payload.priceRange[1];
+      const newFilters = action.payload;
 
-            // Filter by location
-            const locationMatch =
-              !action.payload.location ||
-              room.maViTri === action.payload.location;
+      // Kiểm tra xem có filter nào thay đổi không
+      const filtersChanged =
+        JSON.stringify(state.filters) !== JSON.stringify(newFilters);
 
-            // Filter by rating
-            const ratingMatch =
-              !action.payload.rating ||
-              (room.averageRating !== null &&
-                room.averageRating >= action.payload.rating);
+      state.filters = newFilters;
 
-            // Filter by guests (assuming khach field exists)
-            const guestsMatch =
-              !room.khach || room.khach >= action.payload.guests;
+      // Chỉ apply filter khi có thay đổi
+      if (filtersChanged) {
+        const filtered = {};
 
-            return priceMatch && locationMatch && ratingMatch && guestsMatch;
-          }
-        );
-      });
-      state.filteredRoomsByLocation = filtered;
+        // Sử dụng Object.entries để tối ưu hóa loop
+        Object.entries(state.roomsByLocation).forEach(([locationId, rooms]) => {
+          filtered[locationId] = rooms.filter((room) => {
+            // Tối ưu: Kiểm tra điều kiện đơn giản trước
+            if (newFilters.location && room.maViTri !== newFilters.location) {
+              return false;
+            }
+
+            if (room.khach && room.khach < newFilters.guests) {
+              return false;
+            }
+
+            if (
+              room.giaTien < newFilters.priceRange[0] ||
+              room.giaTien > newFilters.priceRange[1]
+            ) {
+              return false;
+            }
+
+            if (
+              newFilters.rating > 0 &&
+              (room.averageRating === null ||
+                room.averageRating < newFilters.rating)
+            ) {
+              return false;
+            }
+
+            return true;
+          });
+        });
+
+        state.filteredRoomsByLocation = filtered;
+      }
     },
     clearFilters: (state) => {
       state.filters = {

@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import RoomFilter from "./RoomFilter";
@@ -38,12 +44,41 @@ export default function RoomListPage() {
   const [dragStart, setDragStart] = useState({});
 
   // Sử dụng filteredRoomsByLocation thay vì roomsByLocation để hiển thị
-  const displayRoomsByLocation =
-    Object.keys(filteredRoomsByLocation).length > 0
+  const displayRoomsByLocation = useMemo(() => {
+    return Object.keys(filteredRoomsByLocation).length > 0
       ? filteredRoomsByLocation
       : roomsByLocation;
+  }, [filteredRoomsByLocation, roomsByLocation]);
 
-  const scrollLeft = (locationId) => {
+  // Memoize việc tính toán locations có phòng
+  const availableLocations = useMemo(() => {
+    return locations.filter(
+      (loc) =>
+        displayRoomsByLocation[loc.id] &&
+        displayRoomsByLocation[loc.id].length > 0
+    );
+  }, [locations, displayRoomsByLocation]);
+
+  // Memoize việc phân trang
+  const paginationData = useMemo(() => {
+    const indexOfLastLocation = currentPage * locationsPerPage;
+    const indexOfFirstLocation = indexOfLastLocation - locationsPerPage;
+    const currentLocations = availableLocations.slice(
+      indexOfFirstLocation,
+      indexOfLastLocation
+    );
+    const totalPages = Math.ceil(availableLocations.length / locationsPerPage);
+
+    return { currentLocations, totalPages };
+  }, [availableLocations, currentPage, locationsPerPage]);
+
+  const { currentLocations, totalPages } = paginationData;
+
+  // Sử dụng currentLocations làm locationsWithRooms
+  const locationsWithRooms = currentLocations;
+
+  // Memoize scroll functions
+  const scrollLeft = useCallback((locationId) => {
     const container = scrollRefs.current[locationId];
     if (!container) return;
 
@@ -55,9 +90,9 @@ export default function RoomListPage() {
       left: targetScroll,
       behavior: "smooth",
     });
-  };
+  }, []);
 
-  const scrollRight = (locationId) => {
+  const scrollRight = useCallback((locationId) => {
     const container = scrollRefs.current[locationId];
     if (!container) return;
 
@@ -70,44 +105,50 @@ export default function RoomListPage() {
       left: targetScroll,
       behavior: "smooth",
     });
-  };
+  }, []);
 
-  // Drag scroll handlers
-  const handleMouseDown = (e, locationId) => {
-    const container = scrollRefs.current[locationId];
-    if (!container) return;
+  // Drag scroll handlers với useCallback
+  const handleMouseDown = useCallback(
+    (e, locationId) => {
+      const container = scrollRefs.current[locationId];
+      if (!container) return;
 
-    setIsDragging((prev) => ({ ...prev, [locationId]: true }));
-    setDragStart((prev) => ({
-      ...prev,
-      [locationId]: {
-        x: e.pageX,
-        scrollLeft: container.scrollLeft,
-      },
-    }));
+      setIsDragging((prev) => ({ ...prev, [locationId]: true }));
+      setDragStart((prev) => ({
+        ...prev,
+        [locationId]: {
+          x: e.pageX,
+          scrollLeft: container.scrollLeft,
+        },
+      }));
 
-    container.style.scrollBehavior = "auto"; // Tắt smooth scroll khi drag
-    e.preventDefault();
-  };
+      container.style.scrollBehavior = "auto"; // Tắt smooth scroll khi drag
+      e.preventDefault();
+    },
+    [dragStart, isDragging]
+  );
 
-  const handleMouseMove = (e, locationId) => {
-    if (!isDragging[locationId]) return;
+  const handleMouseMove = useCallback(
+    (e, locationId) => {
+      if (!isDragging[locationId]) return;
 
-    const container = scrollRefs.current[locationId];
-    if (!container || !dragStart[locationId]) return;
+      const container = scrollRefs.current[locationId];
+      if (!container || !dragStart[locationId]) return;
 
-    e.preventDefault();
+      e.preventDefault();
 
-    // Tính toán khoảng cách di chuyển
-    const x = e.pageX;
-    const walkX = (x - dragStart[locationId].x) * 1.5; // Tăng độ nhạy
-    const newScrollLeft = dragStart[locationId].scrollLeft - walkX;
+      // Tính toán khoảng cách di chuyển
+      const x = e.pageX;
+      const walkX = (x - dragStart[locationId].x) * 1.5; // Tăng độ nhạy
+      const newScrollLeft = dragStart[locationId].scrollLeft - walkX;
 
-    // Áp dụng scroll ngay lập tức
-    container.scrollLeft = newScrollLeft;
-  };
+      // Áp dụng scroll ngay lập tức
+      container.scrollLeft = newScrollLeft;
+    },
+    [isDragging, dragStart]
+  );
 
-  const handleMouseUp = (locationId) => {
+  const handleMouseUp = useCallback((locationId) => {
     setIsDragging((prev) => ({ ...prev, [locationId]: false }));
 
     // Bật lại smooth scroll
@@ -115,9 +156,9 @@ export default function RoomListPage() {
     if (container) {
       container.style.scrollBehavior = "smooth";
     }
-  };
+  }, []);
 
-  const handleMouseLeave = (locationId) => {
+  const handleMouseLeave = useCallback((locationId) => {
     setIsDragging((prev) => ({ ...prev, [locationId]: false }));
 
     // Bật lại smooth scroll
@@ -125,7 +166,7 @@ export default function RoomListPage() {
     if (container) {
       container.style.scrollBehavior = "smooth";
     }
-  };
+  }, []);
 
   useEffect(() => {
     // Global mouse event listeners để xử lý drag khi chuột ra ngoài container
@@ -172,25 +213,6 @@ export default function RoomListPage() {
     }
   }, [searchCriteria, dispatch]);
 
-  const indexOfLastLocation = currentPage * locationsPerPage;
-  const indexOfFirstLocation = indexOfLastLocation - locationsPerPage;
-
-  // Lọc locations có phòng trước khi phân trang
-  const availableLocations = locations.filter(
-    (loc) =>
-      displayRoomsByLocation[loc.id] &&
-      displayRoomsByLocation[loc.id].length > 0
-  );
-
-  const currentLocations = availableLocations.slice(
-    indexOfFirstLocation,
-    indexOfLastLocation
-  );
-  const totalPages = Math.ceil(availableLocations.length / locationsPerPage);
-
-  // Lọc các địa điểm có phòng phù hợp (chính là currentLocations vì đã được lọc)
-  const locationsWithRooms = currentLocations;
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -206,15 +228,15 @@ export default function RoomListPage() {
     setCurrentPage(1);
   };
 
-  // Đếm số filter đang active
-  const activeFiltersCount = () => {
+  // Đếm số filter đang active với useMemo
+  const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (filters.location) count++;
     if (filters.rating > 0) count++;
     if (filters.guests > 1) count++;
     if (filters.priceRange[0] > 0 || filters.priceRange[1] < 10000000) count++;
     return count;
-  };
+  }, [filters]);
 
   return (
     <div
@@ -235,7 +257,7 @@ export default function RoomListPage() {
             <button
               onClick={() => setShowFilterModal(true)}
               className={`filter-button flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 ${
-                activeFiltersCount() > 0
+                activeFiltersCount > 0
                   ? "filter-active"
                   : theme === "dark"
                   ? "!bg-gray-800 hover:!bg-gray-700 !text-white !border-gray-600"
@@ -245,8 +267,8 @@ export default function RoomListPage() {
               <FunnelIcon className="w-5 h-5" />
               <span>Bộ lọc</span>
             </button>
-            {activeFiltersCount() > 0 && (
-              <div className="filter-badge">{activeFiltersCount()}</div>
+            {activeFiltersCount > 0 && (
+              <div className="filter-badge">{activeFiltersCount}</div>
             )}
           </div>
         </div>
@@ -280,7 +302,7 @@ export default function RoomListPage() {
         ) : (
           <div className="flex flex-col gap-14">
             {/* Hiển thị thông báo khi không có địa điểm nào có phòng phù hợp */}
-            {locationsWithRooms.length === 0 && activeFiltersCount() > 0 ? (
+            {locationsWithRooms.length === 0 && activeFiltersCount > 0 ? (
               <div className="text-center py-20">
                 <div className="text-6xl mb-4">🏠</div>
                 <h3 className="text-2xl font-semibold mb-2 dark:text-white">
@@ -359,7 +381,7 @@ export default function RoomListPage() {
                     >
                       {displayRoomsByLocation[loc.id]?.length === 0 ? (
                         <div className="text-gray-400 italic">
-                          {activeFiltersCount() > 0
+                          {activeFiltersCount > 0
                             ? "Không có phòng nào phù hợp với bộ lọc."
                             : "Chưa có phòng nào."}
                         </div>
