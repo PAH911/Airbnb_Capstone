@@ -11,11 +11,11 @@ import authReducer from "../pages/client-customer/LoginPage/authSlice";
 import roomListReducer from "../pages/client-customer/RoomListPage/RoomListSlice";
 import adminUserReducer from "../pages/client-admin/UserManager/adminUserSlice";
 import adminRoomReducer from "../pages/client-admin/RoomManager/adminRoomSlice";
-import adminBookingReducer from "../pages/client-admin/BookingManager/adminBookingSlice";
 import adminCommentReducer from "../pages/client-admin/CommentManager/adminCommentSlice";
 import adminLoginReducer from "../pages/client-admin/AuthPage/authSlice";
 import locationReducer from "../pages/client-admin/LocationManager/locationSlice";
 import themeReducer from "./themeSlice";
+import searchReducer from "./searchSlice";
 
 // Persist config
 const persistConfig = {
@@ -33,10 +33,10 @@ const rootReducer = combineReducers({
   roomList: roomListReducer,
   roomDetail: roomDetailReducer,
   theme: themeReducer, // Thêm theme reducer
+  search: searchReducer, // Thêm search reducer
 
   userList: adminUserReducer, // Đổi tên từ adminUser thành userList để khớp với component
   adminRoom: adminRoomReducer,
-  adminBooking: adminBookingReducer,
   adminComment: adminCommentReducer,
   location: locationReducer, // Thêm location reducer
 });

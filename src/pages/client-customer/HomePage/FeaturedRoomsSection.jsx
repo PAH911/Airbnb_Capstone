@@ -45,23 +45,26 @@ export default function FeaturedRoomsSection() {
               <motion.div
                 key={room.id}
                 whileHover={{
-                  scale: 1.04,
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
+                  y: -8,
+                  transition: { duration: 0.3, ease: "easeOut" },
                 }}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="group"
               >
                 <Card
-                  hoverable
-                  className="rounded-2xl overflow-hidden shadow-lg border-0 bg-white dark:bg-gray-800"
+                  hoverable={false}
+                  className="rounded-2xl overflow-hidden shadow-lg border-0 bg-white dark:bg-gray-800 group-hover:shadow-2xl transition-all duration-300"
                   cover={
-                    <img
-                      src={room.hinhAnh}
-                      alt={room.tenPhong}
-                      className="h-56 w-full object-cover"
-                    />
+                    <div className="overflow-hidden">
+                      <img
+                        src={room.hinhAnh}
+                        alt={room.tenPhong}
+                        className="h-56 w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
                   }
                 >
                   <Title
@@ -78,7 +81,7 @@ export default function FeaturedRoomsSection() {
                       {room.khach} khách
                     </Text>
                   </div>
-                  <Text className="block mt-2 text-gray-500 dark:text-gray-300">
+                  <Text className="block mt-2 text-gray-500 dark:text-gray-300 line-clamp-2">
                     {room.moTa}
                   </Text>
                 </Card>

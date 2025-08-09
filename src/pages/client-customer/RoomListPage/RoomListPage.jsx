@@ -19,6 +19,7 @@ import "./room-filter.css";
 export default function RoomListPage() {
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.theme?.theme || "light");
+  const searchCriteria = useSelector((state) => state.search?.searchCriteria);
   const {
     locations,
     rooms,
@@ -156,6 +157,20 @@ export default function RoomListPage() {
   useEffect(() => {
     dispatch(fetchRoomListData());
   }, [dispatch]);
+
+  // Áp dụng filter từ Hero search khi component mount
+  useEffect(() => {
+    if (searchCriteria && searchCriteria.isFromHeroSearch) {
+      const newFilters = {
+        priceRange: filters.priceRange, // Giữ nguyên price range
+        location: searchCriteria.locationId,
+        rating: 0, // Reset rating
+        guests: searchCriteria.guests,
+      };
+
+      dispatch(setFilters(newFilters));
+    }
+  }, [searchCriteria, dispatch]);
 
   const indexOfLastLocation = currentPage * locationsPerPage;
   const indexOfFirstLocation = indexOfLastLocation - locationsPerPage;

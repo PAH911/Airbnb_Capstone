@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import * as locationService from "../../../services/locationService";
-import * as roomService from "../../../services/roomService";
+import { setSearchCriteria } from "../../../store/searchSlice";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { MapPin, Users, Calendar as CalendarIcon, Search } from "lucide-react";
@@ -20,7 +21,7 @@ import {
   PopoverTrigger,
 } from "../../../components/ui/popover";
 import { Calendar } from "../../../components/ui/calendar";
-import { toast } from "react-toastify"; // Thêm toast thông báo
+import { toast } from "react-toastify";
 
 export default function HeroSection() {
   const [locations, setLocations] = useState([]);
@@ -29,6 +30,7 @@ export default function HeroSection() {
   const [dateRange, setDateRange] = useState({ from: null, to: null });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     locationService.getLocations().then((res) => {
@@ -55,47 +57,54 @@ export default function HeroSection() {
     setDateRange({ from: range.from || null, to: range.to || null });
   };
 
-  // Xử lý tìm kiếm phòng (validate và chuyển trang)
+  // Xử lý tìm kiếm phòng - lưu thông tin và chuyển đến trang rooms
   const handleSearch = async () => {
-    // Kiểm tra đủ trường
+    // Kiểm tra địa điểm (bắt buộc)
     if (!locationId) {
       toast.warn("Vui lòng chọn địa điểm!");
       return;
     }
-    if (!dateRange.from || !dateRange.to) {
-      toast.warn("Vui lòng chọn ngày nhận phòng và trả phòng!");
+
+    // Kiểm tra ngày (không bắt buộc, nhưng nếu có thì phải đầy đủ)
+    if (
+      (dateRange.from && !dateRange.to) ||
+      (!dateRange.from && dateRange.to)
+    ) {
+      toast.warn("Vui lòng chọn đầy đủ ngày nhận phòng và trả phòng!");
       return;
     }
+
+    // Kiểm tra số khách
     if (!guests || guests < 1) {
       toast.warn("Vui lòng nhập số lượng khách hợp lệ!");
       return;
     }
 
-    // Gọi API tìm phòng theo locationId (và các filter khác nếu có)
-    const res = await roomService.getRoomsByLocation(locationId);
-    let rooms = res.data.content || [];
-    // Chọn phòng đầu tiên (ví dụ), thực tế bạn phải render danh sách rồi mới chọn phòng
-    const room = rooms[0]; // Đây là ví dụ
+    setLoading(true);
 
-    if (!room) {
-      toast.warn("Không tìm thấy phòng phù hợp!");
-      return;
+    try {
+      // Lưu thông tin tìm kiếm vào Redux store
+      dispatch(
+        setSearchCriteria({
+          locationId: parseInt(locationId),
+          dateRange: {
+            from: dateRange.from
+              ? dayjs(dateRange.from).format("YYYY-MM-DD")
+              : null,
+            to: dateRange.to ? dayjs(dateRange.to).format("YYYY-MM-DD") : null,
+          },
+          guests: guests,
+        })
+      );
+
+      // Chuyển đến trang rooms với filter sẵn
+      navigate("/rooms");
+    } catch (error) {
+      console.error("Search error:", error);
+      toast.error("Có lỗi xảy ra trong quá trình tìm kiếm!");
+    } finally {
+      setLoading(false);
     }
-
-    // Tính tổng tiền & số đêm (ví dụ)
-    const nights = dayjs(dateRange.to).diff(dayjs(dateRange.from), "day");
-    const totalPrice = nights * room.giaTien;
-
-    navigate("/booking", {
-      state: {
-        room,
-        startDate: dayjs(dateRange.from).format("YYYY-MM-DD"),
-        endDate: dayjs(dateRange.to).format("YYYY-MM-DD"),
-        guests,
-        totalPrice,
-        nights,
-      },
-    });
   };
 
   // Helper: lấy label địa điểm đầy đủ
