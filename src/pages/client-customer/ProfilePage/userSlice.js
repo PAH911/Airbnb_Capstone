@@ -38,13 +38,22 @@ export const uploadAvatarThunk = createAsyncThunk(
   async ({ formData, userId }, { rejectWithValue, dispatch }) => {
     try {
       const res = await uploadUserAvatarService(formData);
-      // Nếu chỉ trả về link thì fetch lại user
+      console.log("Upload avatar response:", res.data);
+      
+      // Fetch lại thông tin user mới nhất sau khi upload
       const userRes = await dispatch(fetchUser(userId)).unwrap();
+      
+      // Cập nhật localStorage
       localStorage.setItem("userInfo", JSON.stringify(userRes));
+      
       return userRes;
     } catch (err) {
+      console.error("Upload avatar error:", err);
       return rejectWithValue(
-        err.response?.data?.message || "Lỗi upload avatar"
+        err.response?.data?.message || 
+        err.response?.data?.content || 
+        err.message || 
+        "Lỗi upload avatar"
       );
     }
   }

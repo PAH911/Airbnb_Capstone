@@ -128,18 +128,35 @@ export default function ProfilePage() {
 
   // Xử lý upload avatar
   const handleAvatarChange = async (info) => {
+    // Validate file
+    const file = info.file;
+    const isImage = file.type.startsWith('image/');
+    const isLt2M = file.size / 1024 / 1024 < 2;
+
+    if (!isImage) {
+      message.error('Vui lòng chọn file hình ảnh!');
+      return;
+    }
+    if (!isLt2M) {
+      message.error('Kích thước hình ảnh phải nhỏ hơn 2MB!');
+      return;
+    }
+
     setAvatarLoading(true);
     const formData = new FormData();
-    formData.append("formFile", info.file);
+    formData.append("formFile", file);
+    
     try {
+      console.log("Starting avatar upload for user:", user.id);
       const userUpdated = await dispatch(
         uploadAvatarThunk({ formData, userId: user.id })
       ).unwrap();
-      // Không cần fetchUser, đã đồng bộ Redux và localStorage rồi
+      
+      console.log("Avatar upload successful:", userUpdated);
       message.success("Cập nhật avatar thành công!");
-      setEditModal(false);
     } catch (err) {
-      message.error(err?.message || err || "Lỗi cập nhật avatar");
+      console.error("Avatar upload failed:", err);
+      message.error(err || "Lỗi cập nhật avatar");
     } finally {
       setAvatarLoading(false);
     }
